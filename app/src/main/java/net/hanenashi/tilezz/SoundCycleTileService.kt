@@ -8,7 +8,6 @@ import android.media.AudioManager
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
-import android.widget.Toast
 
 class SoundCycleTileService : TileService() {
     override fun onStartListening() {
@@ -24,9 +23,7 @@ class SoundCycleTileService : TileService() {
             return
         }
 
-        val result = controller.cycle("tile")
-        Toast.makeText(this, result.toastMessageRes(), Toast.LENGTH_SHORT).show()
-        updateTile()
+        openCycleActivity()
     }
 
     private fun updateTile() {
@@ -55,7 +52,15 @@ class SoundCycleTileService : TileService() {
     }
 
     private fun openPermissionActivity() {
-        val intent = Intent(this, MainActivity::class.java).apply {
+        openActivity(MainActivity::class.java)
+    }
+
+    private fun openCycleActivity() {
+        openActivity(CycleActivity::class.java)
+    }
+
+    private fun openActivity(activityClass: Class<*>) {
+        val intent = Intent(this, activityClass).apply {
             addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
         if (Build.VERSION.SDK_INT >= 34) {

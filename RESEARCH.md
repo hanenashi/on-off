@@ -58,11 +58,13 @@ Consequences:
 An always-running service is out of scope. The foreground component should
 exist only for a requested transition and stop immediately afterward.
 
-Pixel 10a live result: SystemUI-invoked `TileService.onClick()` completed the
-cycle successfully with hardening set to `throw`. No `AudioHardening` exception
-was observed. Tilezz still verifies the actual ringer state because the
-DND-to-vibrate transition races Android's asynchronous ringer restoration when
-DND is disabled.
+Pixel 10a live result: direct `TileService.onClick()` work was unreliable when
+Tilezz's UI was hidden. Cycling from the main activity worked consistently, and
+cycling from the tile became reliable when the tile launched a short-lived
+transparent `CycleActivity` that performed the state change in the foreground.
+Tilezz still verifies the actual ringer state because the DND-to-vibrate
+transition races Android's asynchronous ringer restoration when DND is
+disabled.
 
 ### Ringer mode still requires policy access
 
@@ -134,6 +136,8 @@ Validated:
   `cmd statusbar click-tile net.hanenashi.tilezz/.SoundCycleTileService`;
 - hardening throw mode via `cmd audio set-hardening throw`;
 - DND-to-vibrate needs a short stable-read retry after disabling DND;
+- tile clicks should route through `CycleActivity`; doing the work directly in
+  `TileService` can fail when the app UI is hidden;
 - external DND remains active instead of being cleared by Tilezz.
 
 ## Official references

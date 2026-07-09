@@ -44,11 +44,14 @@ that Android recognizes as foreground/while-in-use and verify the observed
 state afterward. The exact foreground-service or visible-activity mechanism is
 subject to Pixel testing; see `RESEARCH.md`.
 
-Live testing on the Pixel 10a showed that a SystemUI-invoked Quick Settings
-tile click can perform the cycle successfully, including with Android audio
-hardening set to throw. The implementation still verifies observed state after
-each write and retries the DND-to-vibrate handoff because Android restores
-ringer state asynchronously when leaving DND.
+Live testing on the Pixel 10a showed that direct background work from
+`TileService.onClick()` is not reliable when Tilezz's activity is hidden:
+Android can block or drop ringer-mode changes and Toast presentation. The tile
+therefore launches a tiny transparent foreground `CycleActivity`, performs the
+requested cycle there, shows the Toast, asks the tile to refresh, and finishes.
+The implementation still verifies observed state after each write and retries
+the DND-to-vibrate handoff because Android restores ringer state asynchronously
+when leaving DND.
 
 ## Tile presentation
 
@@ -229,6 +232,8 @@ Verified on Teneichan, a Pixel 10a running Android 17/API 37:
 - Quick Settings tile cycle works via SystemUI:
   Sound → Tilezz DND → Vibrate → Sound;
 - Quick Settings tile shows mode-specific icons and Toast feedback;
+- Quick Settings tile routes through a short-lived transparent activity so
+  Android 17 treats the action as foreground user-initiated work;
 - the same tile cycle works with `cmd audio set-hardening throw`;
 - external/manual DND remains active when Tilezz does not own the active DND
   state.
