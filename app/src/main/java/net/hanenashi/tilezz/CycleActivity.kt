@@ -20,19 +20,16 @@ class CycleActivity : Activity() {
         }
         cycled = true
 
-        window.decorView.postDelayed({
-            val result = SoundCycleController(this).cycle("tile-activity")
-            Toast.makeText(this, result.toastMessageRes(), Toast.LENGTH_SHORT).show()
-            TileService.requestListeningState(
-                this,
-                ComponentName(this, SoundCycleTileService::class.java),
-            )
-            window.decorView.postDelayed({ finish() }, FINISH_DELAY_MS)
-        }, CYCLE_DELAY_MS)
+        val result = SoundCycleController(this).cycle("tile-activity")
+        Toast.makeText(this, result.toastMessageRes(), Toast.LENGTH_SHORT).show()
+        TileService.requestListeningState(
+            this,
+            ComponentName(this, SoundCycleTileService::class.java),
+        )
+        window.decorView.postDelayed({ finishAndRemoveTask() }, FINISH_DELAY_MS)
     }
 
     companion object {
-        private const val CYCLE_DELAY_MS = 120L
         private const val FINISH_DELAY_MS = 250L
     }
 }

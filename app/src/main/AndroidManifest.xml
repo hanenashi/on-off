@@ -26,7 +26,9 @@
             android:excludeFromRecents="true"
             android:exported="false"
             android:finishOnTaskLaunch="true"
+            android:launchMode="singleTask"
             android:noHistory="true"
+            android:taskAffinity="net.hanenashi.tilezz.cycle"
             android:theme="@style/Theme.Tilezz.Cycle" />
 
         <service

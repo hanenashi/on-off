@@ -56,7 +56,25 @@ class SoundCycleTileService : TileService() {
     }
 
     private fun openCycleActivity() {
-        openActivity(CycleActivity::class.java)
+        val intent = Intent(this, CycleActivity::class.java).apply {
+            addFlags(
+                Intent.FLAG_ACTIVITY_NEW_TASK or
+                    Intent.FLAG_ACTIVITY_CLEAR_TASK or
+                    Intent.FLAG_ACTIVITY_NO_ANIMATION,
+            )
+        }
+        if (Build.VERSION.SDK_INT >= 34) {
+            val pendingIntent = PendingIntent.getActivity(
+                this,
+                1,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT,
+            )
+            startActivityAndCollapse(pendingIntent)
+        } else {
+            @Suppress("DEPRECATION", "StartActivityAndCollapseDeprecated")
+            startActivityAndCollapse(intent)
+        }
     }
 
     private fun openActivity(activityClass: Class<*>) {

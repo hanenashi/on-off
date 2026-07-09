@@ -47,11 +47,14 @@ subject to Pixel testing; see `RESEARCH.md`.
 Live testing on the Pixel 10a showed that direct background work from
 `TileService.onClick()` is not reliable when Tilezz's activity is hidden:
 Android can block or drop ringer-mode changes and Toast presentation. The tile
-therefore launches a tiny transparent foreground `CycleActivity`, performs the
-requested cycle there, shows the Toast, asks the tile to refresh, and finishes.
-The implementation still verifies observed state after each write and retries
-the DND-to-vibrate handoff because Android restores ringer state asynchronously
-when leaving DND.
+therefore launches a tiny transparent foreground `CycleActivity` in a separate
+throwaway task, performs the requested cycle there, shows the Toast, asks the
+tile to refresh, and finishes. The separate task avoids revealing
+`MainActivity` underneath the Quick Settings shade. A true `NoDisplay` activity
+was tested and rejected because Android requires it to finish before `onResume`
+returns, which breaks repeated cycling. The implementation still verifies
+observed state after each write and retries the DND-to-vibrate handoff because
+Android restores ringer state asynchronously when leaving DND.
 
 ## Tile presentation
 

@@ -61,10 +61,14 @@ exist only for a requested transition and stop immediately afterward.
 Pixel 10a live result: direct `TileService.onClick()` work was unreliable when
 Tilezz's UI was hidden. Cycling from the main activity worked consistently, and
 cycling from the tile became reliable when the tile launched a short-lived
-transparent `CycleActivity` that performed the state change in the foreground.
-Tilezz still verifies the actual ringer state because the DND-to-vibrate
-transition races Android's asynchronous ringer restoration when DND is
-disabled.
+transparent `CycleActivity` in a separate throwaway task. This prevents the
+main Tilezz GUI from appearing underneath Quick Settings while preserving a
+foreground activity context for ringer changes. A `Theme.NoDisplay` variant was
+tested; it avoided surfaces but was not viable because Android requires
+NoDisplay activities to finish before `onResume()` returns, and repeated tile
+clicks stopped cycling correctly. Tilezz still verifies the actual ringer state
+because the DND-to-vibrate transition races Android's asynchronous ringer
+restoration when DND is disabled.
 
 ### Ringer mode still requires policy access
 
