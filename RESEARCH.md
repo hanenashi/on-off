@@ -46,17 +46,23 @@ tap grants that capability.
 Consequences:
 
 - Calling `setRingerMode()` directly in `TileService.onClick()` is not a valid
-  Android 17 design.
+  Android 17 design without device verification.
 - Tilezz needs a narrowly scoped user-initiated foreground execution path.
 - A briefly visible activity is the reliable fallback if a service launched
   from the tile does not receive while-in-use capability.
 - The implementation must read `ringerMode` after setting it and report a
   failure rather than optimistically updating the tile.
 - Pixel testing must inspect Logcat for `AudioHardening` and use
-  `adb shell cmd audio set-enable-hardening throw` during development.
+  `adb shell cmd audio set-hardening throw` during development.
 
 An always-running service is out of scope. The foreground component should
 exist only for a requested transition and stop immediately afterward.
+
+Pixel 10a live result: SystemUI-invoked `TileService.onClick()` completed the
+cycle successfully with hardening set to `throw`. No `AudioHardening` exception
+was observed. Tilezz still verifies the actual ringer state because the
+DND-to-vibrate transition races Android's asynchronous ringer restoration when
+DND is disabled.
 
 ### Ringer mode still requires policy access
 
@@ -108,6 +114,27 @@ DND active after Tilezz deactivates its rule.
 6. Confirm behavior with the screen locked and unlocked.
 7. Confirm external schedules and user overrides remain authoritative.
 8. Delete Tilezz's automatic rule in Settings and verify recovery.
+
+## Live device notes
+
+Tested on Teneichan, Pixel 10a, Android 17/API 37.
+
+ADB setup:
+
+- wireless ADB paired over Tailscale and connected over both Tailscale and LAN;
+- LAN endpoint used for debug commands: `192.168.0.104:35339`.
+
+Validated:
+
+- debug install succeeds;
+- `cmd notification allow_dnd net.hanenashi.tilezz` grants policy access;
+- visible activity cycle:
+  `SoundToTilezzDnd`, `TilezzDndToVibrate`, `VibrateToSound`;
+- Quick Settings tile cycle through `cmd statusbar expand-settings` +
+  `cmd statusbar click-tile net.hanenashi.tilezz/.SoundCycleTileService`;
+- hardening throw mode via `cmd audio set-hardening throw`;
+- DND-to-vibrate needs a short stable-read retry after disabling DND;
+- external DND remains active instead of being cleared by Tilezz.
 
 ## Official references
 

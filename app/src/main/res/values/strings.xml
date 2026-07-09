@@ -5,6 +5,8 @@
     <string name="open_dnd_access">Open Do Not Disturb access</string>
     <string name="access_granted">Do Not Disturb access is granted.</string>
     <string name="access_missing">Do Not Disturb access is not granted.</string>
+    <string name="cycle_now">Cycle now</string>
+    <string name="last_result">Last result: %1$s</string>
     <string name="state_dnd">DND</string>
     <string name="state_vibrate">Vibrate</string>
     <string name="state_sound">Sound</string>

@@ -16,15 +16,13 @@ class SoundCycleTileService : TileService() {
 
     override fun onClick() {
         super.onClick()
-        val notificationManager = getSystemService(NotificationManager::class.java)
-        if (!notificationManager.isNotificationPolicyAccessGranted) {
+        val controller = SoundCycleController(this)
+        if (!controller.hasPolicyAccess()) {
             openPermissionActivity()
             return
         }
 
-        // State transitions are added after the Android 17 foreground execution
-        // path is verified. Direct setRingerMode() calls here are silently
-        // ignored by Android 17 background-audio hardening.
+        controller.cycle("tile")
         updateTile()
     }
 

@@ -12,6 +12,8 @@ import android.widget.TextView
 
 class MainActivity : Activity() {
     private lateinit var statusView: TextView
+    private lateinit var stateView: TextView
+    private lateinit var resultView: TextView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,6 +27,20 @@ class MainActivity : Activity() {
                 startActivity(Intent(Settings.ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS))
             }
         }
+        val cycleButton = Button(this).apply {
+            text = getString(R.string.cycle_now)
+            setOnClickListener {
+                val result = SoundCycleController(this@MainActivity).cycle("activity")
+                resultView.text = getString(R.string.last_result, result.outcome.name)
+                refreshState()
+            }
+        }
+        stateView = TextView(this).apply {
+            textSize = 16f
+        }
+        resultView = TextView(this).apply {
+            textSize = 16f
+        }
 
         setContentView(LinearLayout(this).apply {
             orientation = LinearLayout.VERTICAL
@@ -37,16 +53,24 @@ class MainActivity : Activity() {
             })
             addView(statusView)
             addView(accessButton)
+            addView(cycleButton)
+            addView(stateView)
+            addView(resultView)
         })
     }
 
     override fun onResume() {
         super.onResume()
+        refreshState()
+    }
+
+    private fun refreshState() {
         val manager = getSystemService(NotificationManager::class.java)
         statusView.text = if (manager.isNotificationPolicyAccessGranted) {
             getString(R.string.access_granted)
         } else {
             getString(R.string.access_missing)
         }
+        stateView.text = SoundCycleController(this).snapshot().toString()
     }
 }

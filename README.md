@@ -44,6 +44,12 @@ that Android recognizes as foreground/while-in-use and verify the observed
 state afterward. The exact foreground-service or visible-activity mechanism is
 subject to Pixel testing; see `RESEARCH.md`.
 
+Live testing on the Pixel 10a showed that a SystemUI-invoked Quick Settings
+tile click can perform the cycle successfully, including with Android audio
+hardening set to throw. The implementation still verifies observed state after
+each write and retries the DND-to-vibrate handoff because Android restores
+ringer state asynchronously when leaving DND.
+
 ## Tile presentation
 
 The tile should show the current state using labels such as:
@@ -208,3 +214,16 @@ Tilezz is complete when:
 Possible future work—configurable order, silent mode, selectable DND modes,
 long-press configuration, or additional tiles—is explicitly out of scope for
 the first version.
+
+## Live Pixel status
+
+Verified on Teneichan, a Pixel 10a running Android 17/API 37:
+
+- debug APK installs successfully;
+- DND policy access can be granted with Android settings or ADB;
+- visible activity cycle works: Sound → Tilezz DND → Vibrate → Sound;
+- Quick Settings tile cycle works via SystemUI:
+  Sound → Tilezz DND → Vibrate → Sound;
+- the same tile cycle works with `cmd audio set-hardening throw`;
+- external/manual DND remains active when Tilezz does not own the active DND
+  state.
