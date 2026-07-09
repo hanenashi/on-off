@@ -108,6 +108,18 @@ data class SoundState(
             "effectiveDnd=$effectiveDnd, tilezzDndRequested=$tilezzDndRequested)"
 }
 
+fun SoundState.modeLabelRes(): Int = when {
+    effectiveDnd -> R.string.state_dnd
+    ringerMode == AudioManager.RINGER_MODE_VIBRATE -> R.string.state_vibrate
+    else -> R.string.state_sound
+}
+
+fun CycleResult.toastMessageRes(): Int = when (outcome) {
+    CycleOutcome.MissingPolicyAccess -> R.string.toast_missing_access
+    CycleOutcome.ExternalDndActive -> R.string.toast_external_dnd
+    else -> after.modeLabelRes()
+}
+
 data class CycleResult(
     val before: SoundState,
     val after: SoundState,

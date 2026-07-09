@@ -3,10 +3,12 @@ package net.hanenashi.tilezz
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.drawable.Icon
 import android.media.AudioManager
 import android.os.Build
 import android.service.quicksettings.Tile
 import android.service.quicksettings.TileService
+import android.widget.Toast
 
 class SoundCycleTileService : TileService() {
     override fun onStartListening() {
@@ -22,7 +24,8 @@ class SoundCycleTileService : TileService() {
             return
         }
 
-        controller.cycle("tile")
+        val result = controller.cycle("tile")
+        Toast.makeText(this, result.toastMessageRes(), Toast.LENGTH_SHORT).show()
         updateTile()
     }
 
@@ -34,16 +37,21 @@ class SoundCycleTileService : TileService() {
 
         qsTile?.apply {
             state = if (dndActive) Tile.STATE_ACTIVE else Tile.STATE_INACTIVE
-            label = getString(
-                when {
-                    dndActive -> R.string.state_dnd
-                    audioManager.ringerMode == AudioManager.RINGER_MODE_VIBRATE ->
-                        R.string.state_vibrate
-                    else -> R.string.state_sound
-                },
-            )
+            val mode = when {
+                dndActive -> TileMode.Dnd
+                audioManager.ringerMode == AudioManager.RINGER_MODE_VIBRATE -> TileMode.Vibrate
+                else -> TileMode.Sound
+            }
+            label = getString(mode.labelRes)
+            icon = Icon.createWithResource(this@SoundCycleTileService, mode.iconRes)
             updateTile()
         }
+    }
+
+    private enum class TileMode(val labelRes: Int, val iconRes: Int) {
+        Dnd(R.string.state_dnd, R.drawable.ic_tile_dnd),
+        Vibrate(R.string.state_vibrate, R.drawable.ic_tile_vibrate),
+        Sound(R.string.state_sound, R.drawable.ic_tile_sound),
     }
 
     private fun openPermissionActivity() {

@@ -58,10 +58,14 @@ The tile should show the current state using labels such as:
 - Vibrate
 - Sound
 
-Use Android vector drawables for appropriate DND, vibration, and speaker icons
-where practical. Refresh the display from `onStartListening()` and immediately
-after each tap. Tile state, labels, and icons must reflect observed system
-state.
+Use Android vector drawables for appropriate DND, vibration, and speaker icons.
+Refresh the display from `onStartListening()` and immediately after each tap.
+Tile state, labels, and icons must reflect observed system state. Android's
+tile picker uses the static manifest icon, but the active Quick Settings tile
+updates its icon after the service observes the current mode.
+
+After each successful tap, show a short Toast naming the resulting mode. If
+external DND is active, show that Tilezz left external DND untouched.
 
 ## Permissions and first run
 
@@ -224,6 +228,7 @@ Verified on Teneichan, a Pixel 10a running Android 17/API 37:
 - visible activity cycle works: Sound → Tilezz DND → Vibrate → Sound;
 - Quick Settings tile cycle works via SystemUI:
   Sound → Tilezz DND → Vibrate → Sound;
+- Quick Settings tile shows mode-specific icons and Toast feedback;
 - the same tile cycle works with `cmd audio set-hardening throw`;
 - external/manual DND remains active when Tilezz does not own the active DND
   state.

@@ -9,6 +9,7 @@ import android.view.Gravity
 import android.widget.Button
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 
 class MainActivity : Activity() {
     private lateinit var statusView: TextView
@@ -31,6 +32,7 @@ class MainActivity : Activity() {
             text = getString(R.string.cycle_now)
             setOnClickListener {
                 val result = SoundCycleController(this@MainActivity).cycle("activity")
+                Toast.makeText(this@MainActivity, result.toastMessageRes(), Toast.LENGTH_SHORT).show()
                 resultView.text = getString(R.string.last_result, result.outcome.name)
                 refreshState()
             }

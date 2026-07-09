@@ -10,4 +10,6 @@
     <string name="state_dnd">DND</string>
     <string name="state_vibrate">Vibrate</string>
     <string name="state_sound">Sound</string>
+    <string name="toast_missing_access">DND access required</string>
+    <string name="toast_external_dnd">External DND still active</string>
 </resources>
