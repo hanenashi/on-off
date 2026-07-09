@@ -23,15 +23,26 @@ after researching the APIs required for correct modern DND behavior.
 Each tap must inspect the real system state rather than advance an internal
 counter:
 
-1. If DND is active, disable DND and switch to vibrate.
-2. If DND is inactive and the ringer is in vibrate mode, switch to normal.
-3. Otherwise, enable DND.
+1. If Tilezz's own DND rule is active, deactivate it and switch to vibrate.
+2. If another DND source remains active, report external DND instead of
+   claiming the transition succeeded.
+3. If DND is inactive and the ringer is in vibrate mode, switch to normal.
+4. Otherwise, activate Tilezz's DND rule.
 
 This keeps the tile correct when state changes through volume controls, Android
-Settings, schedules, automation, another application, or a reboot.
+Settings, schedules, automation, another application, or a reboot. Android
+15+ does not let Tilezz disable a DND rule owned by the user, the system, or
+another application.
 
 The normal state means `AudioManager.RINGER_MODE_NORMAL`; Tilezz must not force
 or otherwise modify the user's volume levels.
+
+Android 17 also restricts background ringer-mode changes. A plain
+`TileService.onClick()` call to `AudioManager.setRingerMode()` can be silently
+ignored. Tilezz must perform the user-requested transition from a lifecycle
+that Android recognizes as foreground/while-in-use and verify the observed
+state afterward. The exact foreground-service or visible-activity mechanism is
+subject to Pixel testing; see `RESEARCH.md`.
 
 ## Tile presentation
 
@@ -187,7 +198,8 @@ Tilezz is complete when:
 - it installs on the Pixel 10a;
 - its tile can be added normally;
 - permission guidance works clearly;
-- taps produce DND → Vibrate → Normal → DND;
+- taps produce Tilezz DND → Vibrate → Normal → Tilezz DND;
+- external DND remains untouched and is represented honestly;
 - transitions use actual system state, not a stored counter;
 - presentation reflects current state;
 - behavior survives app restarts and phone reboots;

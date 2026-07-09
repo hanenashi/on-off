@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Tilezz</string>
+    <string name="tile_label">Sound mode</string>
+    <string name="explanation">Tilezz adds one Quick Settings tile for cycling Tilezz DND, vibrate, and normal sound.</string>
+    <string name="open_dnd_access">Open Do Not Disturb access</string>
+    <string name="access_granted">Do Not Disturb access is granted.</string>
+    <string name="access_missing">Do Not Disturb access is not granted.</string>
+    <string name="state_dnd">DND</string>
+    <string name="state_vibrate">Vibrate</string>
+    <string name="state_sound">Sound</string>
+</resources>
