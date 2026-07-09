@@ -8,6 +8,10 @@ Settings tile for cycling the phone's actual sound state:
 The project replaces one useful feature from the abandoned Tiles application.
 It is not intended to become a general-purpose Quick Settings tile collection.
 
+## Version
+
+Current useful release: **v1.0**.
+
 ## Primary target
 
 - Google Pixel 10a running Android 17
