@@ -20,6 +20,9 @@ Current development behavior after v1.0:
 - Settings can include or exclude DND and Vibrate from the cycle;
 - defaults are DND excluded and Vibrate included, so launcher taps toggle
   Sound ↔ Vibrate unless changed.
+- the launcher icon is switched between Sound, Vibrate, and DND aliases after
+  Tilezz observes the current mode. Android launchers may cache icon state, so
+  visual refresh timing is launcher-dependent.
 
 ## Primary target
 

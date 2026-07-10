@@ -54,6 +54,7 @@ class MainActivity : Activity() {
             text = getString(R.string.cycle_now)
             setOnClickListener {
                 val result = SoundCycleController(this@MainActivity).cycle("activity")
+                LauncherIconController(this@MainActivity).updateForCurrentMode(result.after)
                 Toast.makeText(this@MainActivity, result.toastMessageRes(), Toast.LENGTH_SHORT).show()
                 resultView.text = getString(R.string.last_result, result.outcome.name)
                 refreshState()
@@ -102,6 +103,8 @@ class MainActivity : Activity() {
             getString(R.string.access_missing)
         }
         val controller = SoundCycleController(this)
-        stateView.text = "${controller.settings()}\n${controller.snapshot()}"
+        val snapshot = controller.snapshot()
+        LauncherIconController(this).updateForCurrentMode(snapshot)
+        stateView.text = "${controller.settings()}\n$snapshot"
     }
 }

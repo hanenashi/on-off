@@ -19,12 +19,20 @@
         <activity
             android:name=".CycleActivity"
             android:excludeFromRecents="true"
-            android:exported="true"
+            android:exported="false"
             android:finishOnTaskLaunch="true"
             android:launchMode="singleTask"
             android:noHistory="true"
             android:taskAffinity="net.hanenashi.tilezz.cycle"
-            android:theme="@style/Theme.Tilezz.Cycle">
+            android:theme="@style/Theme.Tilezz.Cycle" />
+
+        <activity-alias
+            android:name=".LauncherSound"
+            android:enabled="true"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_sound"
+            android:label="@string/app_name"
+            android:targetActivity=".CycleActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -32,7 +40,39 @@
             <meta-data
                 android:name="android.app.shortcuts"
                 android:resource="@xml/shortcuts" />
-        </activity>
+        </activity-alias>
+
+        <activity-alias
+            android:name=".LauncherVibrate"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_vibrate"
+            android:label="@string/app_name"
+            android:targetActivity=".CycleActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity-alias>
+
+        <activity-alias
+            android:name=".LauncherDnd"
+            android:enabled="false"
+            android:exported="true"
+            android:icon="@drawable/ic_tile_dnd"
+            android:label="@string/app_name"
+            android:targetActivity=".CycleActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity-alias>
 
         <service
             android:name=".SoundCycleTileService"

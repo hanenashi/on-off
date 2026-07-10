@@ -22,6 +22,7 @@ class CycleActivity : Activity() {
         cycled = true
 
         val result = SoundCycleController(this).cycle("tile-activity")
+        LauncherIconController(this).updateForCurrentMode(result.after)
         Toast.makeText(this, result.toastMessageRes(), Toast.LENGTH_SHORT).show()
         if (result.outcome == CycleOutcome.MissingPolicyAccess) {
             startActivity(Intent(this, MainActivity::class.java).apply {
