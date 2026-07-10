@@ -8,6 +8,7 @@ import android.provider.Settings
 import android.view.Gravity
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
 
@@ -15,12 +16,33 @@ class MainActivity : Activity() {
     private lateinit var statusView: TextView
     private lateinit var stateView: TextView
     private lateinit var resultView: TextView
+    private lateinit var includeDndSwitch: Switch
+    private lateinit var includeVibrateSwitch: Switch
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val controller = SoundCycleController(this)
+        val settings = controller.settings()
+
         statusView = TextView(this).apply {
             textSize = 18f
+        }
+        includeDndSwitch = Switch(this).apply {
+            text = getString(R.string.include_dnd)
+            isChecked = settings.includeDnd
+            setOnCheckedChangeListener { _, checked ->
+                SoundCycleController(this@MainActivity).setIncludeDnd(checked)
+                refreshState()
+            }
+        }
+        includeVibrateSwitch = Switch(this).apply {
+            text = getString(R.string.include_vibrate)
+            isChecked = settings.includeVibrate
+            setOnCheckedChangeListener { _, checked ->
+                SoundCycleController(this@MainActivity).setIncludeVibrate(checked)
+                refreshState()
+            }
         }
         val accessButton = Button(this).apply {
             text = getString(R.string.open_dnd_access)
@@ -50,9 +72,15 @@ class MainActivity : Activity() {
             val padding = (24 * resources.displayMetrics.density).toInt()
             setPadding(padding, padding, padding, padding)
             addView(TextView(context).apply {
+                text = getString(R.string.settings_title)
+                textSize = 24f
+            })
+            addView(TextView(context).apply {
                 text = getString(R.string.explanation)
                 textSize = 20f
             })
+            addView(includeDndSwitch)
+            addView(includeVibrateSwitch)
             addView(statusView)
             addView(accessButton)
             addView(cycleButton)
@@ -73,6 +101,7 @@ class MainActivity : Activity() {
         } else {
             getString(R.string.access_missing)
         }
-        stateView.text = SoundCycleController(this).snapshot().toString()
+        val controller = SoundCycleController(this)
+        stateView.text = "${controller.settings()}\n${controller.snapshot()}"
     }
 }

@@ -1,10 +1,13 @@
 <resources>
     <string name="app_name">Tilezz</string>
     <string name="tile_label">Sound mode</string>
-    <string name="explanation">Tilezz adds one Quick Settings tile for cycling Tilezz DND, vibrate, and normal sound.</string>
+    <string name="explanation">Tap the Tilezz icon to cycle sound modes. Long-press the icon for Settings. The Quick Settings tile is still available as a secondary control.</string>
     <string name="open_dnd_access">Open Do Not Disturb access</string>
     <string name="access_granted">Do Not Disturb access is granted.</string>
     <string name="access_missing">Do Not Disturb access is not granted.</string>
+    <string name="include_dnd">Include Do Not Disturb</string>
+    <string name="include_vibrate">Include Vibrate</string>
+    <string name="settings_title">Tilezz settings</string>
     <string name="cycle_now">Cycle now</string>
     <string name="last_result">Last result: %1$s</string>
     <string name="state_dnd">DND</string>
@@ -12,4 +15,6 @@
     <string name="state_sound">Sound</string>
     <string name="toast_missing_access">DND access required</string>
     <string name="toast_external_dnd">External DND still active</string>
+    <string name="shortcut_settings_short">Settings</string>
+    <string name="shortcut_settings_long">Tilezz settings</string>
 </resources>

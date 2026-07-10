@@ -8,6 +8,8 @@ import android.util.Log
 private const val TAG = "Tilezz"
 private const val PREFS = "tilezz"
 private const val KEY_DND_REQUESTED = "dnd_requested"
+private const val KEY_INCLUDE_DND = "include_dnd"
+private const val KEY_INCLUDE_VIBRATE = "include_vibrate"
 
 class SoundCycleController(private val context: Context) {
     private val notificationManager = context.getSystemService(NotificationManager::class.java)
@@ -15,6 +17,19 @@ class SoundCycleController(private val context: Context) {
     private val prefs = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
 
     fun hasPolicyAccess(): Boolean = notificationManager.isNotificationPolicyAccessGranted
+
+    fun settings(): CycleSettings = CycleSettings(
+        includeDnd = prefs.getBoolean(KEY_INCLUDE_DND, false),
+        includeVibrate = prefs.getBoolean(KEY_INCLUDE_VIBRATE, true),
+    )
+
+    fun setIncludeDnd(include: Boolean) {
+        prefs.edit().putBoolean(KEY_INCLUDE_DND, include).apply()
+    }
+
+    fun setIncludeVibrate(include: Boolean) {
+        prefs.edit().putBoolean(KEY_INCLUDE_VIBRATE, include).apply()
+    }
 
     fun snapshot(): SoundState {
         val interruptionFilter = notificationManager.currentInterruptionFilter
@@ -29,19 +44,24 @@ class SoundCycleController(private val context: Context) {
 
     fun cycle(source: String): CycleResult {
         val before = snapshot()
-        Log.i(TAG, "cycle($source) before=$before")
-
-        if (!hasPolicyAccess()) {
-            return CycleResult(before, before, CycleOutcome.MissingPolicyAccess)
-        }
+        val settings = settings()
+        Log.i(TAG, "cycle($source) settings=$settings before=$before")
 
         val outcome = when {
             before.effectiveDnd && before.tilezzDndRequested -> {
+                if (!hasPolicyAccess()) {
+                    return CycleResult(before, before, CycleOutcome.MissingPolicyAccess)
+                }
                 notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
                 prefs.edit().putBoolean(KEY_DND_REQUESTED, false).apply()
                 waitForDndOff()
-                setRingerModeVerified(AudioManager.RINGER_MODE_VIBRATE)
-                CycleOutcome.TilezzDndToVibrate
+                if (settings.includeVibrate) {
+                    setRingerModeVerified(AudioManager.RINGER_MODE_VIBRATE)
+                    CycleOutcome.TilezzDndToVibrate
+                } else {
+                    setRingerModeVerified(AudioManager.RINGER_MODE_NORMAL)
+                    CycleOutcome.TilezzDndToSound
+                }
             }
 
             before.effectiveDnd -> {
@@ -55,10 +75,25 @@ class SoundCycleController(private val context: Context) {
                 CycleOutcome.VibrateToSound
             }
 
-            else -> {
+            settings.includeDnd -> {
+                if (!hasPolicyAccess()) {
+                    return CycleResult(before, before, CycleOutcome.MissingPolicyAccess)
+                }
                 notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_NONE)
                 prefs.edit().putBoolean(KEY_DND_REQUESTED, true).apply()
                 CycleOutcome.SoundToTilezzDnd
+            }
+
+            settings.includeVibrate -> {
+                prefs.edit().putBoolean(KEY_DND_REQUESTED, false).apply()
+                setRingerModeVerified(AudioManager.RINGER_MODE_VIBRATE)
+                CycleOutcome.SoundToVibrate
+            }
+
+            else -> {
+                prefs.edit().putBoolean(KEY_DND_REQUESTED, false).apply()
+                setRingerModeVerified(AudioManager.RINGER_MODE_NORMAL)
+                CycleOutcome.SoundOnly
             }
         }
 
@@ -96,6 +131,11 @@ class SoundCycleController(private val context: Context) {
     }
 }
 
+data class CycleSettings(
+    val includeDnd: Boolean,
+    val includeVibrate: Boolean,
+)
+
 data class SoundState(
     val interruptionFilter: Int,
     val ringerMode: Int,
@@ -130,7 +170,10 @@ enum class CycleOutcome {
     MissingPolicyAccess,
     ExternalDndActive,
     SoundToTilezzDnd,
+    SoundToVibrate,
+    SoundOnly,
     TilezzDndToVibrate,
+    TilezzDndToSound,
     VibrateToSound,
 }
 

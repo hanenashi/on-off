@@ -14,22 +14,25 @@
 
         <activity
             android:name=".MainActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:exported="true" />
 
         <activity
             android:name=".CycleActivity"
             android:excludeFromRecents="true"
-            android:exported="false"
+            android:exported="true"
             android:finishOnTaskLaunch="true"
             android:launchMode="singleTask"
             android:noHistory="true"
             android:taskAffinity="net.hanenashi.tilezz.cycle"
-            android:theme="@style/Theme.Tilezz.Cycle" />
+            android:theme="@style/Theme.Tilezz.Cycle">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <meta-data
+                android:name="android.app.shortcuts"
+                android:resource="@xml/shortcuts" />
+        </activity>
 
         <service
             android:name=".SoundCycleTileService"

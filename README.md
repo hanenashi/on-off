@@ -1,7 +1,8 @@
 # Tilezz
 
-Tilezz is a deliberately small Android application that provides one Quick
-Settings tile for cycling the phone's actual sound state:
+Tilezz is a deliberately small Android application that cycles the phone's
+actual sound state from the launcher icon, with a Quick Settings tile kept as a
+secondary control:
 
 **Do Not Disturb → Vibrate → Normal sound → Do Not Disturb**
 
@@ -11,6 +12,14 @@ It is not intended to become a general-purpose Quick Settings tile collection.
 ## Version
 
 Current useful release: **v1.0**.
+
+Current development behavior after v1.0:
+
+- tapping the Tilezz launcher icon cycles immediately and exits;
+- long-pressing the launcher icon exposes a Settings shortcut;
+- Settings can include or exclude DND and Vibrate from the cycle;
+- defaults are DND excluded and Vibrate included, so launcher taps toggle
+  Sound ↔ Vibrate unless changed.
 
 ## Primary target
 
