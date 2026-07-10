@@ -1,10 +1,11 @@
 <resources>
-    <style name="Theme.Tilezz" parent="android:style/Theme.Material.Light.NoActionBar">
+    <style name="Theme.Tilezz" parent="android:style/Theme.Material.NoActionBar">
         <item name="android:fontFamily">sans</item>
-        <item name="android:colorAccent">#4255A4</item>
-        <item name="android:navigationBarColor">#F8F8FC</item>
-        <item name="android:statusBarColor">#F8F8FC</item>
-        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:colorAccent">#8EA2FF</item>
+        <item name="android:navigationBarColor">#090B12</item>
+        <item name="android:statusBarColor">#090B12</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
     </style>
 
     <style name="Theme.Tilezz.Cycle" parent="android:style/Theme.Material.NoActionBar">

@@ -6,7 +6,12 @@
     <string name="access_granted">Do Not Disturb access is granted.</string>
     <string name="access_missing">Do Not Disturb access is not granted.</string>
     <string name="include_dnd">Include Do Not Disturb</string>
+    <string name="include_dnd_summary">Add Tilezz-owned DND to the cycle.</string>
     <string name="include_vibrate">Include Vibrate</string>
+    <string name="include_vibrate_summary">Use Vibrate between Sound and any enabled DND step.</string>
+    <string name="permission_section">Permission</string>
+    <string name="cycle_section">Cycle modes</string>
+    <string name="diagnostics_section">Current state</string>
     <string name="settings_title">Tilezz settings</string>
     <string name="cycle_now">Cycle now</string>
     <string name="last_result">Last result: %1$s</string>
