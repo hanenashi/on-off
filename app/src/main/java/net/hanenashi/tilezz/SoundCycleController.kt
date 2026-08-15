@@ -192,10 +192,22 @@ fun SoundState.modeLabelRes(): Int = when {
     else -> R.string.state_sound
 }
 
+fun SoundState.modeIconRes(): Int = when {
+    effectiveDnd -> R.drawable.ic_tile_dnd
+    ringerMode == AudioManager.RINGER_MODE_VIBRATE -> R.drawable.ic_tile_vibrate
+    else -> R.drawable.ic_tile_sound
+}
+
 fun CycleResult.toastMessageRes(): Int = when (outcome) {
     CycleOutcome.MissingPolicyAccess -> R.string.toast_missing_access
     CycleOutcome.ExternalDndActive -> R.string.toast_external_dnd
     else -> after.modeLabelRes()
+}
+
+fun CycleResult.toastIconRes(): Int = when (outcome) {
+    CycleOutcome.MissingPolicyAccess,
+    CycleOutcome.ExternalDndActive -> R.drawable.ic_tile_dnd
+    else -> after.modeIconRes()
 }
 
 data class CycleResult(

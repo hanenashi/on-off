@@ -17,7 +17,6 @@ import android.widget.RadioGroup
 import android.widget.ScrollView
 import android.widget.Switch
 import android.widget.TextView
-import android.widget.Toast
 
 class MainActivity : Activity() {
     private lateinit var statusView: TextView
@@ -94,7 +93,7 @@ class MainActivity : Activity() {
             setOnClickListener {
                 val result = SoundCycleController(this@MainActivity).cycle("activity")
                 LauncherIconController(this@MainActivity).updateForCurrentMode(result.after)
-                Toast.makeText(this@MainActivity, result.toastMessageRes(), Toast.LENGTH_SHORT).show()
+                ModeToast.show(this@MainActivity, result)
                 resultView.text = getString(R.string.last_result, getString(result.toastMessageRes()))
                 refreshState()
             }

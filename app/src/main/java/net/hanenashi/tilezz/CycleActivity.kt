@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.Toast
 
 class CycleActivity : Activity() {
     private var cycled = false
@@ -26,7 +25,7 @@ class CycleActivity : Activity() {
 
         val result = SoundCycleController(this).cycle("launcher")
         LauncherIconController(this).updateForCurrentMode(result.after)
-        Toast.makeText(this, result.toastMessageRes(), Toast.LENGTH_SHORT).show()
+        ModeToast.show(this, result)
         if (result.outcome == CycleOutcome.MissingPolicyAccess) {
             startActivity(Intent(this, MainActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -36,6 +35,6 @@ class CycleActivity : Activity() {
     }
 
     companion object {
-        private const val FINISH_DELAY_MS = 250L
+        private const val FINISH_DELAY_MS = 900L
     }
 }
