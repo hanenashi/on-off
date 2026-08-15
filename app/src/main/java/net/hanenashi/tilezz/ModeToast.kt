@@ -14,6 +14,7 @@ import android.widget.TextView
 
 object ModeToast {
     private const val DISMISS_DELAY_MS = 760L
+    private const val SCREEN_TOP_FRACTION = 0.33f
 
     fun show(activity: Activity, result: CycleResult) {
         val root = activity.window.decorView as? ViewGroup ?: return
@@ -51,21 +52,22 @@ object ModeToast {
         root.addView(toast, FrameLayout.LayoutParams(
             FrameLayout.LayoutParams.WRAP_CONTENT,
             FrameLayout.LayoutParams.WRAP_CONTENT,
-            Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL,
+            Gravity.TOP or Gravity.END,
         ).apply {
-            bottomMargin = dp(96)
+            topMargin = (activity.resources.displayMetrics.heightPixels * SCREEN_TOP_FRACTION).toInt()
+            marginEnd = dp(18)
         })
         toast.alpha = 0f
-        toast.translationY = dp(10).toFloat()
+        toast.translationX = dp(48).toFloat()
         toast.animate()
             .alpha(1f)
-            .translationY(0f)
+            .translationX(0f)
             .setDuration(120L)
             .withEndAction {
                 toast.postDelayed({
                     toast.animate()
                         .alpha(0f)
-                        .translationY(dp(8).toFloat())
+                        .translationX(dp(48).toFloat())
                         .setDuration(160L)
                         .withEndAction {
                             if (toast.parent === root) {
