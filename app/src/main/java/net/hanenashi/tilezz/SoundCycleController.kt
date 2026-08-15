@@ -3,6 +3,7 @@ package net.hanenashi.tilezz
 import android.app.NotificationManager
 import android.content.Context
 import android.media.AudioManager
+import android.os.Build
 import android.util.Log
 
 private const val TAG = "Tilezz"
@@ -25,6 +26,12 @@ class SoundCycleController(private val context: Context) {
 
     fun setIncludeDnd(include: Boolean) {
         prefs.edit().putBoolean(KEY_INCLUDE_DND, include).apply()
+        if (!include) {
+            clearStoredTilezzDndRequest()
+            if (hasPolicyAccess() && shouldUseAppAssociatedDndRule()) {
+                deactivateTilezzDndRule("settings-disable-dnd")
+            }
+        }
     }
 
     fun setIncludeVibrate(include: Boolean) {
@@ -48,29 +55,10 @@ class SoundCycleController(private val context: Context) {
         Log.i(TAG, "cycle($source) settings=$settings before=$before")
 
         val outcome = when {
-            before.effectiveDnd && before.tilezzDndRequested -> {
-                if (!hasPolicyAccess()) {
-                    return CycleResult(before, before, CycleOutcome.MissingPolicyAccess)
-                }
-                notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
-                prefs.edit().putBoolean(KEY_DND_REQUESTED, false).apply()
-                waitForDndOff()
-                if (settings.includeVibrate) {
-                    setRingerModeVerified(AudioManager.RINGER_MODE_VIBRATE)
-                    CycleOutcome.TilezzDndToVibrate
-                } else {
-                    setRingerModeVerified(AudioManager.RINGER_MODE_NORMAL)
-                    CycleOutcome.TilezzDndToSound
-                }
-            }
-
-            before.effectiveDnd -> {
-                prefs.edit().putBoolean(KEY_DND_REQUESTED, false).apply()
-                CycleOutcome.ExternalDndActive
-            }
+            before.effectiveDnd -> handleActiveDnd(before, settings)
 
             before.ringerMode == AudioManager.RINGER_MODE_VIBRATE -> {
-                prefs.edit().putBoolean(KEY_DND_REQUESTED, false).apply()
+                clearStoredTilezzDndRequest()
                 setRingerModeVerified(AudioManager.RINGER_MODE_NORMAL)
                 CycleOutcome.VibrateToSound
             }
@@ -85,13 +73,13 @@ class SoundCycleController(private val context: Context) {
             }
 
             settings.includeVibrate -> {
-                prefs.edit().putBoolean(KEY_DND_REQUESTED, false).apply()
+                clearStoredTilezzDndRequest()
                 setRingerModeVerified(AudioManager.RINGER_MODE_VIBRATE)
                 CycleOutcome.SoundToVibrate
             }
 
             else -> {
-                prefs.edit().putBoolean(KEY_DND_REQUESTED, false).apply()
+                clearStoredTilezzDndRequest()
                 setRingerModeVerified(AudioManager.RINGER_MODE_NORMAL)
                 CycleOutcome.SoundOnly
             }
@@ -101,6 +89,56 @@ class SoundCycleController(private val context: Context) {
         Log.i(TAG, "cycle($source) outcome=$outcome after=$after")
         return CycleResult(before, after, outcome)
     }
+
+    private fun handleActiveDnd(before: SoundState, settings: CycleSettings): CycleOutcome {
+        val canSafelyTryToClearTilezzRule = shouldUseAppAssociatedDndRule() || before.tilezzDndRequested
+        if (!canSafelyTryToClearTilezzRule) {
+            clearStoredTilezzDndRequest()
+            return CycleOutcome.ExternalDndActive
+        }
+
+        if (!hasPolicyAccess()) {
+            return if (before.tilezzDndRequested) {
+                CycleOutcome.MissingPolicyAccess
+            } else {
+                clearStoredTilezzDndRequest()
+                CycleOutcome.ExternalDndActive
+            }
+        }
+
+        deactivateTilezzDndRule("cycle")
+        val afterDndClear = snapshot()
+        if (afterDndClear.effectiveDnd) {
+            clearStoredTilezzDndRequest()
+            Log.i(TAG, "DND remained active after Tilezz rule deactivation; treating as external")
+            return CycleOutcome.ExternalDndActive
+        }
+
+        return setNextNonDndMode(settings)
+    }
+
+    private fun setNextNonDndMode(settings: CycleSettings): CycleOutcome =
+        if (settings.includeVibrate) {
+            setRingerModeVerified(AudioManager.RINGER_MODE_VIBRATE)
+            CycleOutcome.TilezzDndToVibrate
+        } else {
+            setRingerModeVerified(AudioManager.RINGER_MODE_NORMAL)
+            CycleOutcome.TilezzDndToSound
+        }
+
+    private fun deactivateTilezzDndRule(reason: String) {
+        Log.i(TAG, "deactivateTilezzDndRule($reason)")
+        notificationManager.setInterruptionFilter(NotificationManager.INTERRUPTION_FILTER_ALL)
+        clearStoredTilezzDndRequest()
+        waitForDndOff()
+    }
+
+    private fun clearStoredTilezzDndRequest() {
+        prefs.edit().putBoolean(KEY_DND_REQUESTED, false).apply()
+    }
+
+    private fun shouldUseAppAssociatedDndRule(): Boolean =
+        Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM
 
     private fun setRingerModeVerified(mode: Int) {
         var actual = audioManager.ringerMode
