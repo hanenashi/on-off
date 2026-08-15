@@ -26,7 +26,9 @@ class CycleActivity : Activity() {
 
         val result = SoundCycleController(this).cycle("launcher")
         LauncherIconController(this).updateForCurrentMode(result.after)
-        ModeToast.show(this, result)
+        window.decorView.postDelayed({
+            ModeToast.show(this, result)
+        }, TOAST_DELAY_MS)
         if (result.outcome == CycleOutcome.MissingPolicyAccess) {
             startActivity(Intent(this, MainActivity::class.java).apply {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -44,6 +46,7 @@ class CycleActivity : Activity() {
     }
 
     companion object {
-        private const val FINISH_DELAY_MS = 900L
+        private const val TOAST_DELAY_MS = 260L
+        private const val FINISH_DELAY_MS = 1_450L
     }
 }
