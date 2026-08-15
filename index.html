@@ -1,0 +1,438 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <meta name="description" content="音OFF is a tiny Android utility that cycles Sound, Vibrate, and optional DND from the home-screen icon.">
+  <title>音OFF — sound mode cycler for Android</title>
+  <style>
+    :root {
+      --bg: #090b12;
+      --panel: #111521;
+      --panel-2: #171c2b;
+      --text: #f6f7fb;
+      --muted: #aeb6c9;
+      --line: #2a3248;
+      --accent: #8ea2ff;
+      --accent-2: #ff9a57;
+      --radius: 28px;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      color: var(--text);
+      background:
+        radial-gradient(circle at 78% 18%, rgba(142, 162, 255, 0.26), transparent 30rem),
+        radial-gradient(circle at 16% 70%, rgba(255, 154, 87, 0.16), transparent 28rem),
+        var(--bg);
+    }
+
+    a { color: inherit; }
+
+    .wrap {
+      width: min(1080px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 24px 0 56px;
+    }
+
+    header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 10px 0 44px;
+    }
+
+    .brand {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      font-size: 22px;
+    }
+
+    .brand img {
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+    }
+
+    .lang {
+      display: flex;
+      gap: 6px;
+      padding: 5px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(17, 21, 33, 0.78);
+      backdrop-filter: blur(14px);
+    }
+
+    .lang button {
+      border: 0;
+      border-radius: 999px;
+      padding: 9px 13px;
+      color: var(--muted);
+      background: transparent;
+      font: inherit;
+      font-weight: 750;
+      cursor: pointer;
+    }
+
+    .lang button[aria-pressed="true"] {
+      color: #111521;
+      background: var(--text);
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1.04fr 0.96fr;
+      gap: 36px;
+      align-items: center;
+    }
+
+    h1 {
+      margin: 0;
+      max-width: 760px;
+      font-size: clamp(44px, 7vw, 86px);
+      line-height: 0.94;
+      letter-spacing: -0.075em;
+    }
+
+    .lead {
+      margin: 28px 0 0;
+      max-width: 660px;
+      color: var(--muted);
+      font-size: clamp(18px, 2.2vw, 23px);
+      line-height: 1.45;
+    }
+
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0 18px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      text-decoration: none;
+      font-weight: 800;
+      background: var(--panel);
+    }
+
+    .btn.primary {
+      color: #10131e;
+      background: var(--accent);
+      border-color: transparent;
+    }
+
+    .phone {
+      position: relative;
+      min-height: 480px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: linear-gradient(145deg, rgba(23, 28, 43, 0.94), rgba(9, 11, 18, 0.72));
+      box-shadow: 0 30px 90px rgba(0, 0, 0, 0.38);
+      overflow: hidden;
+    }
+
+    .phone::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: radial-gradient(circle at 55% 26%, rgba(142, 162, 255, 0.18), transparent 18rem);
+    }
+
+    .screen {
+      position: absolute;
+      inset: 34px;
+      display: grid;
+      place-items: center;
+      border-radius: 36px;
+      background: #05070d;
+      border: 1px solid #20273a;
+    }
+
+    .icons {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .icons img {
+      width: clamp(76px, 10vw, 112px);
+      height: clamp(76px, 10vw, 112px);
+      border-radius: 22px;
+      filter: drop-shadow(0 20px 24px rgba(0, 0, 0, 0.44));
+    }
+
+    .icons img:nth-child(2) {
+      transform: translateY(-20px) scale(1.1);
+    }
+
+    section {
+      margin-top: 34px;
+      padding: 28px;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      background: rgba(17, 21, 33, 0.72);
+    }
+
+    h2 {
+      margin: 0 0 18px;
+      font-size: clamp(26px, 3vw, 38px);
+      letter-spacing: -0.045em;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .card {
+      padding: 20px;
+      border: 1px solid var(--line);
+      border-radius: 22px;
+      background: var(--panel-2);
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: 8px;
+      font-size: 18px;
+    }
+
+    .card p, .steps li, footer {
+      color: var(--muted);
+      line-height: 1.55;
+    }
+
+    .steps {
+      margin: 0;
+      padding-left: 22px;
+    }
+
+    .steps li + li { margin-top: 10px; }
+
+    footer {
+      padding-top: 32px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    [data-i18n-block] { display: none; }
+    [data-i18n-block].active { display: block; }
+
+    @media (max-width: 800px) {
+      header {
+        align-items: flex-start;
+        flex-direction: column;
+        padding-bottom: 32px;
+      }
+
+      .hero, .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .phone {
+        min-height: 330px;
+      }
+
+      .screen {
+        inset: 20px;
+      }
+
+      section {
+        padding: 22px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <img src="assets/sound.png" alt="">
+        <span>音OFF</span>
+      </div>
+      <nav class="lang" aria-label="Language">
+        <button type="button" data-lang="en" aria-pressed="true">English</button>
+        <button type="button" data-lang="cs" aria-pressed="false">Česky</button>
+        <button type="button" data-lang="ja" aria-pressed="false">日本語</button>
+      </nav>
+    </header>
+
+    <main>
+      <article data-i18n-block="en" class="active" lang="en">
+        <div class="hero">
+          <div>
+            <h1>One tap for Sound, Vibrate, or DND.</h1>
+            <p class="lead">音OFF is a tiny Android utility for people who want a home-screen icon that changes the phone’s real sound mode immediately, without opening a full app.</p>
+            <div class="actions">
+              <a class="btn primary" href="https://github.com/hanenashi/on-off/releases/latest/download/on-off-v1.0.1-debug.apk">Download APK</a>
+              <a class="btn" href="https://github.com/hanenashi/on-off">Source on GitHub</a>
+            </div>
+          </div>
+          <div class="phone" aria-hidden="true">
+            <div class="screen">
+              <div class="icons">
+                <img src="assets/sound.png" alt="">
+                <img src="assets/vibrate.png" alt="">
+                <img src="assets/dnd.png" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section>
+          <h2>Why</h2>
+          <div class="grid">
+            <div class="card"><strong>No dashboard.</strong><p>Tap the launcher icon and the mode changes. The app exits by itself.</p></div>
+            <div class="card"><strong>Real state, not a counter.</strong><p>音OFF checks Android’s current ringer and DND state before deciding what to do.</p></div>
+            <div class="card"><strong>Pixel-friendly.</strong><p>Built around modern Android DND behavior instead of unreliable background Quick Settings cycling.</p></div>
+          </div>
+        </section>
+
+        <section>
+          <h2>How to use</h2>
+          <ol class="steps">
+            <li>Install the APK on Android.</li>
+            <li>Put 音OFF on your home screen.</li>
+            <li>Tap it to cycle Sound ↔ Vibrate by default.</li>
+            <li>Long-press the icon and open Settings if you want to include DND or change language.</li>
+            <li>If DND is included, grant Android “Do Not Disturb access” when asked.</li>
+          </ol>
+        </section>
+      </article>
+
+      <article data-i18n-block="cs" lang="cs">
+        <div class="hero">
+          <div>
+            <h1>Jedno klepnutí pro zvuk, vibrace nebo DND.</h1>
+            <p class="lead">音OFF je malá Android utilita pro lidi, kteří chtějí ikonou na ploše okamžitě přepínat skutečný zvukový režim telefonu, bez otevírání celé aplikace.</p>
+            <div class="actions">
+              <a class="btn primary" href="https://github.com/hanenashi/on-off/releases/latest/download/on-off-v1.0.1-debug.apk">Stáhnout APK</a>
+              <a class="btn" href="https://github.com/hanenashi/on-off">Zdroj na GitHubu</a>
+            </div>
+          </div>
+          <div class="phone" aria-hidden="true">
+            <div class="screen">
+              <div class="icons">
+                <img src="assets/sound.png" alt="">
+                <img src="assets/vibrate.png" alt="">
+                <img src="assets/dnd.png" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section>
+          <h2>Proč</h2>
+          <div class="grid">
+            <div class="card"><strong>Žádný ovládací panel.</strong><p>Klepneš na ikonu a režim se změní. Aplikace se sama zavře.</p></div>
+            <div class="card"><strong>Skutečný stav, ne počítadlo.</strong><p>音OFF nejdřív zkontroluje aktuální režim vyzvánění a DND v Androidu.</p></div>
+            <div class="card"><strong>Vhodné pro Pixel.</strong><p>Postaveno podle moderního chování DND v Androidu, ne podle nespolehlivého přepínání přes Quick Settings na pozadí.</p></div>
+          </div>
+        </section>
+
+        <section>
+          <h2>Jak používat</h2>
+          <ol class="steps">
+            <li>Nainstaluj APK na Android.</li>
+            <li>Dej 音OFF na domovskou obrazovku.</li>
+            <li>Klepnutím přepínáš výchozí cyklus Zvuk ↔ Vibrace.</li>
+            <li>Dlouhým stiskem ikony otevřeš Nastavení, kde lze přidat DND nebo změnit jazyk.</li>
+            <li>Pokud zapneš DND v cyklu, povol Android oprávnění “Přístup k režimu Nerušit”.</li>
+          </ol>
+        </section>
+      </article>
+
+      <article data-i18n-block="ja" lang="ja">
+        <div class="hero">
+          <div>
+            <h1>1タップで<br>音あり・バイブ<br>DNDを切り替え。</h1>
+            <p class="lead">音OFF は、ホーム画面のアイコンを押すだけで Android の実際の音モードをすぐ切り替える小さなユーティリティです。通常のアプリ画面を開く必要はありません。</p>
+            <div class="actions">
+              <a class="btn primary" href="https://github.com/hanenashi/on-off/releases/latest/download/on-off-v1.0.1-debug.apk">APKをダウンロード</a>
+              <a class="btn" href="https://github.com/hanenashi/on-off">GitHubで見る</a>
+            </div>
+          </div>
+          <div class="phone" aria-hidden="true">
+            <div class="screen">
+              <div class="icons">
+                <img src="assets/sound.png" alt="">
+                <img src="assets/vibrate.png" alt="">
+                <img src="assets/dnd.png" alt="">
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <section>
+          <h2>なぜ</h2>
+          <div class="grid">
+            <div class="card"><strong>画面を開かない。</strong><p>ランチャーアイコンを押すとモードが変わり、アプリは自動で閉じます。</p></div>
+            <div class="card"><strong>内部カウンターではなく実状態。</strong><p>音OFF は Android の現在の着信音モードと DND 状態を確認してから切り替えます。</p></div>
+            <div class="card"><strong>Pixel 向けに現実的。</strong><p>不安定な Quick Settings のバックグラウンド操作ではなく、現代の Android DND 動作に合わせています。</p></div>
+          </div>
+        </section>
+
+        <section>
+          <h2>使い方</h2>
+          <ol class="steps">
+            <li>Android に APK をインストールします。</li>
+            <li>音OFF をホーム画面に置きます。</li>
+            <li>アイコンを押すと、初期設定では 音あり ↔ バイブ を切り替えます。</li>
+            <li>アイコンを長押しして Settings を開くと、DND の追加や言語変更ができます。</li>
+            <li>DND を含める場合は、Android の「サイレント モードへのアクセス」を許可してください。</li>
+          </ol>
+        </section>
+      </article>
+    </main>
+
+    <footer>
+      <span>音OFF / on-off</span>
+    </footer>
+  </div>
+
+  <script>
+    const buttons = [...document.querySelectorAll("[data-lang]")];
+    const blocks = [...document.querySelectorAll("[data-i18n-block]")];
+    const supported = new Set(buttons.map((button) => button.dataset.lang));
+
+    function setLanguage(lang) {
+      const selected = supported.has(lang) ? lang : "en";
+      document.documentElement.lang = selected;
+      buttons.forEach((button) => {
+        button.setAttribute("aria-pressed", String(button.dataset.lang === selected));
+      });
+      blocks.forEach((block) => {
+        block.classList.toggle("active", block.dataset.i18nBlock === selected);
+      });
+      localStorage.setItem("onoff-page-language", selected);
+      history.replaceState(null, "", `#${selected}`);
+    }
+
+    buttons.forEach((button) => {
+      button.addEventListener("click", () => setLanguage(button.dataset.lang));
+    });
+
+    const initial = location.hash.slice(1) || localStorage.getItem("onoff-page-language") || navigator.language.slice(0, 2);
+    setLanguage(initial === "cs" || initial === "ja" ? initial : "en");
+  </script>
+</body>
+</html>
