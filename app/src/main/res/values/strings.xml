@@ -1,18 +1,18 @@
 <resources>
-    <string name="app_name">Tilezz</string>
+    <string name="app_name">音OFF</string>
     <string name="tile_label">Sound mode</string>
-    <string name="explanation">Tap the Tilezz icon to cycle sound modes. Long-press the icon for Settings. The Quick Settings tile is still available as a secondary control.</string>
+    <string name="explanation">Tap the 音OFF icon to cycle sound modes. Long-press the icon for Settings. The Quick Settings tile is still available as a secondary control.</string>
     <string name="open_dnd_access">Open Do Not Disturb access</string>
     <string name="access_granted">Do Not Disturb access is granted.</string>
     <string name="access_missing">Do Not Disturb access is not granted.</string>
     <string name="include_dnd">Include Do Not Disturb</string>
-    <string name="include_dnd_summary">Add Tilezz-owned DND to the cycle.</string>
+    <string name="include_dnd_summary">Add app-owned DND to the cycle.</string>
     <string name="include_vibrate">Include Vibrate</string>
     <string name="include_vibrate_summary">Use Vibrate between Sound and any enabled DND step.</string>
     <string name="permission_section">Permission</string>
     <string name="cycle_section">Cycle modes</string>
     <string name="diagnostics_section">Current state</string>
-    <string name="settings_title">Tilezz settings</string>
+    <string name="settings_title">音OFF settings</string>
     <string name="cycle_now">Cycle now</string>
     <string name="last_result">Last result: %1$s</string>
     <string name="state_dnd">DND</string>
@@ -21,5 +21,5 @@
     <string name="toast_missing_access">DND access required</string>
     <string name="toast_external_dnd">External DND still active</string>
     <string name="shortcut_settings_short">Settings</string>
-    <string name="shortcut_settings_long">Tilezz settings</string>
+    <string name="shortcut_settings_long">音OFF settings</string>
 </resources>

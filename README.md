@@ -1,6 +1,6 @@
-# Tilezz
+# 音OFF
 
-Tilezz is a deliberately small Android application that cycles the phone's
+音OFF is a deliberately small Android application that cycles the phone's
 actual sound state from the launcher icon, with a Quick Settings tile kept as a
 secondary control:
 
@@ -15,13 +15,13 @@ Current useful release: **v1.0**.
 
 Current development behavior after v1.0:
 
-- tapping the Tilezz launcher icon cycles immediately and exits;
+- tapping the 音OFF launcher icon cycles immediately and exits;
 - long-pressing the launcher icon exposes a Settings shortcut;
 - Settings can include or exclude DND and Vibrate from the cycle;
 - defaults are DND excluded and Vibrate included, so launcher taps toggle
   Sound ↔ Vibrate unless changed.
 - the launcher icon is switched between Sound, Vibrate, and DND aliases after
-  Tilezz observes the current mode. Android launchers may cache icon state, so
+  音OFF observes the current mode. Android launchers may cache icon state, so
   visual refresh timing is launcher-dependent.
 
 ## Primary target
@@ -39,29 +39,29 @@ after researching the APIs required for correct modern DND behavior.
 Each tap must inspect the real system state rather than advance an internal
 counter:
 
-1. If Tilezz's own DND rule is active, deactivate it and switch to vibrate.
+1. If 音OFF's own DND rule is active, deactivate it and switch to vibrate.
 2. If another DND source remains active, report external DND instead of
    claiming the transition succeeded.
 3. If DND is inactive and the ringer is in vibrate mode, switch to normal.
-4. Otherwise, activate Tilezz's DND rule.
+4. Otherwise, activate 音OFF's DND rule.
 
 This keeps the tile correct when state changes through volume controls, Android
 Settings, schedules, automation, another application, or a reboot. Android
-15+ does not let Tilezz disable a DND rule owned by the user, the system, or
+15+ does not let 音OFF disable a DND rule owned by the user, the system, or
 another application.
 
-The normal state means `AudioManager.RINGER_MODE_NORMAL`; Tilezz must not force
+The normal state means `AudioManager.RINGER_MODE_NORMAL`; 音OFF must not force
 or otherwise modify the user's volume levels.
 
 Android 17 also restricts background ringer-mode changes. A plain
 `TileService.onClick()` call to `AudioManager.setRingerMode()` can be silently
-ignored. Tilezz must perform the user-requested transition from a lifecycle
+ignored. 音OFF must perform the user-requested transition from a lifecycle
 that Android recognizes as foreground/while-in-use and verify the observed
 state afterward. The exact foreground-service or visible-activity mechanism is
 subject to Pixel testing; see `RESEARCH.md`.
 
 Live testing on the Pixel 10a showed that direct background work from
-`TileService.onClick()` is not reliable when Tilezz's activity is hidden:
+`TileService.onClick()` is not reliable when 音OFF's activity is hidden:
 Android can block or drop ringer-mode changes and Toast presentation. The tile
 therefore launches a tiny transparent foreground `CycleActivity` in a separate
 throwaway task, performs the requested cycle there, shows the Toast, asks the
@@ -87,11 +87,11 @@ tile picker uses the static manifest icon, but the active Quick Settings tile
 updates its icon after the service observes the current mode.
 
 After each successful tap, show a short Toast naming the resulting mode. If
-external DND is active, show that Tilezz left external DND untouched.
+external DND is active, show that 音OFF left external DND untouched.
 
 ## Permissions and first run
 
-Tilezz will likely require
+音OFF will likely require
 `android.permission.ACCESS_NOTIFICATION_POLICY`. The user must explicitly grant
 Notification Policy access.
 
@@ -224,13 +224,13 @@ logs rather than claiming it works from build success alone.
 
 ## Success criteria
 
-Tilezz is complete when:
+音OFF is complete when:
 
 - the APK builds with the current Android toolchain;
 - it installs on the Pixel 10a;
 - its tile can be added normally;
 - permission guidance works clearly;
-- taps produce Tilezz DND → Vibrate → Normal → Tilezz DND;
+- taps produce 音OFF DND → Vibrate → Normal → 音OFF DND;
 - external DND remains untouched and is represented honestly;
 - transitions use actual system state, not a stored counter;
 - presentation reflects current state;
@@ -247,12 +247,12 @@ Verified on Teneichan, a Pixel 10a running Android 17/API 37:
 
 - debug APK installs successfully;
 - DND policy access can be granted with Android settings or ADB;
-- visible activity cycle works: Sound → Tilezz DND → Vibrate → Sound;
+- visible activity cycle works: Sound → 音OFF DND → Vibrate → Sound;
 - Quick Settings tile cycle works via SystemUI:
-  Sound → Tilezz DND → Vibrate → Sound;
+  Sound → 音OFF DND → Vibrate → Sound;
 - Quick Settings tile shows mode-specific icons and Toast feedback;
 - Quick Settings tile routes through a short-lived transparent activity so
   Android 17 treats the action as foreground user-initiated work;
 - the same tile cycle works with `cmd audio set-hardening throw`;
-- external/manual DND remains active when Tilezz does not own the active DND
+- external/manual DND remains active when 音OFF does not own the active DND
   state.

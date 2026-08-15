@@ -14,5 +14,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Tilezz"
+rootProject.name = "on-off"
 include(":app")
