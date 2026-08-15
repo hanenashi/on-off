@@ -37,7 +37,7 @@
     .wrap {
       width: min(1080px, calc(100% - 32px));
       margin: 0 auto;
-      padding: 24px 0 56px;
+      padding: 18px 0 24px;
     }
 
     header {
@@ -45,7 +45,7 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding: 10px 0 44px;
+      padding: 6px 0 20px;
     }
 
     .brand {
@@ -99,24 +99,24 @@
     h1 {
       margin: 0;
       max-width: 760px;
-      font-size: clamp(44px, 7vw, 86px);
-      line-height: 0.94;
-      letter-spacing: -0.075em;
+      font-size: clamp(40px, 5.4vw, 64px);
+      line-height: 1;
+      letter-spacing: -0.06em;
     }
 
     .lead {
-      margin: 28px 0 0;
+      margin: 18px 0 0;
       max-width: 660px;
       color: var(--muted);
-      font-size: clamp(18px, 2.2vw, 23px);
-      line-height: 1.45;
+      font-size: clamp(16px, 1.7vw, 19px);
+      line-height: 1.4;
     }
 
     .actions {
       display: flex;
       flex-wrap: wrap;
       gap: 12px;
-      margin-top: 32px;
+      margin-top: 20px;
     }
 
     .btn {
@@ -140,7 +140,7 @@
 
     .phone {
       position: relative;
-      min-height: 480px;
+      min-height: 310px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: linear-gradient(145deg, rgba(23, 28, 43, 0.94), rgba(9, 11, 18, 0.72));
@@ -157,7 +157,7 @@
 
     .screen {
       position: absolute;
-      inset: 34px;
+      inset: 24px;
       display: grid;
       place-items: center;
       border-radius: 36px;
@@ -173,27 +173,27 @@
     }
 
     .icons img {
-      width: clamp(76px, 10vw, 112px);
-      height: clamp(76px, 10vw, 112px);
-      border-radius: 22px;
+      width: clamp(62px, 7vw, 78px);
+      height: clamp(62px, 7vw, 78px);
+      border-radius: 16px;
       filter: drop-shadow(0 20px 24px rgba(0, 0, 0, 0.44));
     }
 
     .icons img:nth-child(2) {
-      transform: translateY(-20px) scale(1.1);
+      transform: translateY(-12px) scale(1.08);
     }
 
     section {
-      margin-top: 34px;
-      padding: 28px;
+      margin-top: 20px;
+      padding: 20px;
       border: 1px solid var(--line);
       border-radius: var(--radius);
       background: rgba(17, 21, 33, 0.72);
     }
 
     h2 {
-      margin: 0 0 18px;
-      font-size: clamp(26px, 3vw, 38px);
+      margin: 0 0 12px;
+      font-size: clamp(24px, 2.4vw, 30px);
       letter-spacing: -0.045em;
     }
 
@@ -204,7 +204,7 @@
     }
 
     .card {
-      padding: 20px;
+      padding: 15px;
       border: 1px solid var(--line);
       border-radius: 22px;
       background: var(--panel-2);
@@ -212,24 +212,26 @@
 
     .card strong {
       display: block;
-      margin-bottom: 8px;
-      font-size: 18px;
+      margin-bottom: 6px;
+      font-size: 16px;
     }
 
     .card p, .steps li, footer {
       color: var(--muted);
-      line-height: 1.55;
+      line-height: 1.4;
     }
+
+    .card p { margin: 0; }
 
     .steps {
       margin: 0;
       padding-left: 22px;
     }
 
-    .steps li + li { margin-top: 10px; }
+    .steps li + li { margin-top: 6px; }
 
     footer {
-      padding-top: 32px;
+      padding-top: 18px;
       text-align: center;
       font-size: 14px;
     }
@@ -237,11 +239,88 @@
     [data-i18n-block] { display: none; }
     [data-i18n-block].active { display: block; }
 
+    @media (min-width: 801px) {
+      .wrap {
+        padding: 12px 0;
+      }
+
+      header {
+        padding: 2px 0 12px;
+      }
+
+      .hero {
+        gap: 24px;
+      }
+
+      h1 {
+        font-size: clamp(38px, 4.8vw, 56px);
+      }
+
+      .lead {
+        margin-top: 14px;
+        font-size: clamp(15px, 1.5vw, 18px);
+      }
+
+      .actions {
+        margin-top: 16px;
+      }
+
+      .phone {
+        min-height: 260px;
+      }
+
+      [data-i18n-block].active {
+        display: grid;
+        grid-template-columns: 1.22fr 0.78fr;
+        gap: 0 20px;
+      }
+
+      [data-i18n-block].active .hero {
+        grid-column: 1 / -1;
+      }
+
+      [data-i18n-block].active section {
+        min-width: 0;
+        margin-top: 14px;
+        padding: 16px;
+      }
+
+      [data-i18n-block].active h2 {
+        margin-bottom: 9px;
+        font-size: 26px;
+      }
+
+      [data-i18n-block].active .card {
+        padding: 12px;
+      }
+
+      [data-i18n-block].active .card strong {
+        margin-bottom: 4px;
+        font-size: 15px;
+      }
+
+      [data-i18n-block].active .card p {
+        font-size: 14px;
+      }
+
+      [data-i18n-block].active section:last-child .steps {
+        font-size: 13px;
+      }
+
+      footer {
+        padding-top: 10px;
+      }
+    }
+
     @media (max-width: 800px) {
+      .wrap {
+        padding-top: 14px;
+      }
+
       header {
         align-items: flex-start;
         flex-direction: column;
-        padding-bottom: 32px;
+        padding-bottom: 24px;
       }
 
       .hero, .grid {
@@ -249,7 +328,7 @@
       }
 
       .phone {
-        min-height: 330px;
+        min-height: 280px;
       }
 
       .screen {
@@ -257,7 +336,17 @@
       }
 
       section {
-        padding: 22px;
+        padding: 18px;
+      }
+
+      h1 {
+        font-size: clamp(38px, 12vw, 56px);
+        line-height: 1.02;
+      }
+
+      .lead {
+        margin-top: 16px;
+        font-size: 17px;
       }
     }
   </style>
