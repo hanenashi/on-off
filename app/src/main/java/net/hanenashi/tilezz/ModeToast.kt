@@ -5,27 +5,21 @@ import android.graphics.Color
 import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.view.Gravity
-import android.view.View
-import android.view.ViewGroup
-import android.widget.FrameLayout
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 
 object ModeToast {
     private const val DISMISS_DELAY_MS = 760L
+    private const val DISMISS_ANIMATION_MS = 160L
     private const val SCREEN_TOP_FRACTION = 0.33f
 
     fun show(activity: Activity, result: CycleResult, onFinished: () -> Unit = {}) {
-        val root = activity.window.decorView as? ViewGroup ?: return
-        val oldToast = root.findViewWithTag<View>(TAG)
-        oldToast?.let { root.removeView(it) }
-
         val density = activity.resources.displayMetrics.density
         fun dp(value: Int): Int = (value * density).toInt()
 
-        val toast = LinearLayout(activity).apply {
-            tag = TAG
+        val content = LinearLayout(activity).apply {
             orientation = LinearLayout.HORIZONTAL
             gravity = Gravity.CENTER_VERTICAL
             setPadding(dp(12), dp(8), dp(16), dp(8))
@@ -49,30 +43,31 @@ object ModeToast {
             })
         }
 
-        root.addView(toast, FrameLayout.LayoutParams(
-            FrameLayout.LayoutParams.WRAP_CONTENT,
-            FrameLayout.LayoutParams.WRAP_CONTENT,
-            Gravity.TOP or Gravity.END,
-        ).apply {
-            topMargin = (activity.resources.displayMetrics.heightPixels * SCREEN_TOP_FRACTION).toInt()
-            marginEnd = dp(18)
-        })
-        toast.alpha = 0f
-        toast.translationX = dp(48).toFloat()
-        toast.animate()
+        val toast = Toast(activity).apply {
+            duration = Toast.LENGTH_SHORT
+            view = content
+            setGravity(
+                Gravity.TOP or Gravity.END,
+                dp(18),
+                (activity.resources.displayMetrics.heightPixels * SCREEN_TOP_FRACTION).toInt(),
+            )
+        }
+
+        content.alpha = 0f
+        content.translationX = dp(48).toFloat()
+        toast.show()
+        content.animate()
             .alpha(1f)
             .translationX(0f)
             .setDuration(120L)
             .withEndAction {
-                toast.postDelayed({
-                    toast.animate()
+                content.postDelayed({
+                    content.animate()
                         .alpha(0f)
                         .translationX(dp(48).toFloat())
-                        .setDuration(160L)
+                        .setDuration(DISMISS_ANIMATION_MS)
                         .withEndAction {
-                            if (toast.parent === root) {
-                                root.removeView(toast)
-                            }
+                            toast.cancel()
                             onFinished()
                         }
                         .start()
@@ -80,6 +75,4 @@ object ModeToast {
             }
             .start()
     }
-
-    private const val TAG = "mode-toast"
 }
