@@ -1,10 +1,8 @@
 package net.hanenashi.tilezz
 
 import android.app.Activity
-import android.content.ComponentName
 import android.content.Intent
 import android.os.Bundle
-import android.service.quicksettings.TileService
 import android.widget.Toast
 
 class CycleActivity : Activity() {
@@ -21,7 +19,7 @@ class CycleActivity : Activity() {
         }
         cycled = true
 
-        val result = SoundCycleController(this).cycle("tile-activity")
+        val result = SoundCycleController(this).cycle("launcher")
         LauncherIconController(this).updateForCurrentMode(result.after)
         Toast.makeText(this, result.toastMessageRes(), Toast.LENGTH_SHORT).show()
         if (result.outcome == CycleOutcome.MissingPolicyAccess) {
@@ -29,10 +27,6 @@ class CycleActivity : Activity() {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             })
         }
-        TileService.requestListeningState(
-            this,
-            ComponentName(this, SoundCycleTileService::class.java),
-        )
         window.decorView.postDelayed({ finishAndRemoveTask() }, FINISH_DELAY_MS)
     }
 

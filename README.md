@@ -1,258 +1,82 @@
 # 音OFF
 
-音OFF is a deliberately small Android application that cycles the phone's
-actual sound state from the launcher icon, with a Quick Settings tile kept as a
-secondary control:
+音OFF is a deliberately small Android utility for cycling the phone's real sound state from the home-screen app icon.
 
-**Do Not Disturb → Vibrate → Normal sound → Do Not Disturb**
+Default cycle:
 
-The project replaces one useful feature from the abandoned Tiles application.
-It is not intended to become a general-purpose Quick Settings tile collection.
+**Sound ↔ Vibrate**
 
-## Version
+Optional cycle when DND is enabled in settings:
 
-Current useful release: **v1.0**.
+**Sound → DND → Vibrate → Sound**
 
-Current development behavior after v1.0:
+The project started as a replacement for one useful feature from the abandoned Tiles app, but it is now intentionally launcher-only. Quick Settings tile cycling was removed because modern Android background restrictions made it less reliable than the home-screen icon path.
 
-- tapping the 音OFF launcher icon cycles immediately and exits;
-- long-pressing the launcher icon exposes a Settings shortcut;
-- Settings can include or exclude DND and Vibrate from the cycle;
-- defaults are DND excluded and Vibrate included, so launcher taps toggle
-  Sound ↔ Vibrate unless changed.
-- the launcher icon is switched between Sound, Vibrate, and DND aliases after
-  音OFF observes the current mode. Android launchers may cache icon state, so
-  visual refresh timing is launcher-dependent.
+## Current behavior
+
+- Tapping the 音OFF launcher icon cycles immediately and exits.
+- Long-pressing the launcher icon exposes a Settings shortcut.
+- Settings can include or exclude DND and Vibrate from the cycle.
+- Defaults are DND excluded and Vibrate included.
+- The launcher icon switches between Sound, Vibrate, and DND aliases after 音OFF observes the current mode. Android launchers may cache icon state, so visual refresh timing is launcher-dependent.
+- Each successful tap shows a short Toast naming the resulting mode.
 
 ## Primary target
 
-- Google Pixel 10a running Android 17
+- Google Pixel 10a running Android 17/API 37
 - Current Android SDK and Android Studio/Gradle toolchain
 - Kotlin and standard Android APIs
 - Minimal dependencies and a simple, readable architecture
 
-Backward compatibility is useful but secondary. The minimum SDK will be chosen
-after researching the APIs required for correct modern DND behavior.
+Backward compatibility is useful but secondary.
 
 ## Required behavior
 
-Each tap must inspect the real system state rather than advance an internal
-counter:
+Each tap must inspect the real system state rather than advance an internal counter:
 
-1. If 音OFF's own DND rule is active, deactivate it and switch to vibrate.
-2. If another DND source remains active, report external DND instead of
-   claiming the transition succeeded.
-3. If DND is inactive and the ringer is in vibrate mode, switch to normal.
-4. Otherwise, activate 音OFF's DND rule.
+1. If DND is active, 音OFF tries to deactivate its own app-associated DND rule.
+2. If another DND source remains active, report external DND instead of claiming the transition succeeded.
+3. If DND is inactive and the ringer is in vibrate mode, switch to normal sound.
+4. If DND is enabled in app settings, activate 音OFF's DND rule.
+5. Otherwise, switch to vibrate when Vibrate is enabled.
 
-This keeps the tile correct when state changes through volume controls, Android
-Settings, schedules, automation, another application, or a reboot. Android
-15+ does not let 音OFF disable a DND rule owned by the user, the system, or
-another application.
+This keeps the app correct when state changes through volume controls, Android Settings, schedules, automation, another application, or a reboot. Android 15+ does not let 音OFF disable a DND rule owned by the user, the system, or another application.
 
-The normal state means `AudioManager.RINGER_MODE_NORMAL`; 音OFF must not force
-or otherwise modify the user's volume levels.
+The normal state means `AudioManager.RINGER_MODE_NORMAL`; 音OFF must not force or otherwise modify the user's volume levels.
 
-Android 17 also restricts background ringer-mode changes. A plain
-`TileService.onClick()` call to `AudioManager.setRingerMode()` can be silently
-ignored. 音OFF must perform the user-requested transition from a lifecycle
-that Android recognizes as foreground/while-in-use and verify the observed
-state afterward. The exact foreground-service or visible-activity mechanism is
-subject to Pixel testing; see `RESEARCH.md`.
+## Android DND behavior
 
-Live testing on the Pixel 10a showed that direct background work from
-`TileService.onClick()` is not reliable when 音OFF's activity is hidden:
-Android can block or drop ringer-mode changes and Toast presentation. The tile
-therefore launches a tiny transparent foreground `CycleActivity` in a separate
-throwaway task, performs the requested cycle there, shows the Toast, asks the
-tile to refresh, and finishes. The separate task avoids revealing
-`MainActivity` underneath the Quick Settings shade. A true `NoDisplay` activity
-was tested and rejected because Android requires it to finish before `onResume`
-returns, which breaks repeated cycling. The implementation still verifies
-observed state after each write and retries the DND-to-vibrate handoff because
-Android restores ringer state asynchronously when leaving DND.
+Android 15+ changed DND control for apps targeting API 35 or newer. Calls to `NotificationManager.setInterruptionFilter()` create or toggle an app-associated `AutomaticZenRule` instead of directly owning global DND. 音OFF therefore treats the Android-observed state as authoritative and deactivates its own rule before deciding whether remaining DND is external.
 
-## Tile presentation
+## Permissions and settings
 
-The tile should show the current state using labels such as:
+音OFF uses `android.permission.ACCESS_NOTIFICATION_POLICY` when DND is included in the cycle. The user must explicitly grant Notification Policy access.
 
-- DND
-- Vibrate
-- Sound
+If access is missing, the app opens its settings screen and provides a button to Android's Do Not Disturb access settings.
 
-Use Android vector drawables for appropriate DND, vibration, and speaker icons.
-Refresh the display from `onStartListening()` and immediately after each tap.
-Tile state, labels, and icons must reflect observed system state. Android's
-tile picker uses the static manifest icon, but the active Quick Settings tile
-updates its icon after the service observes the current mode.
+## Implementation notes
 
-After each successful tap, show a short Toast naming the resulting mode. If
-external DND is active, show that 音OFF left external DND untouched.
-
-## Permissions and first run
-
-音OFF will likely require
-`android.permission.ACCESS_NOTIFICATION_POLICY`. The user must explicitly grant
-Notification Policy access.
-
-If access is missing, the application must not crash or fail silently. A tiny
-launcher activity may:
-
-- explain the utility;
-- show whether DND access is granted;
-- open the appropriate Android Settings screen.
-
-No larger settings interface is planned.
-
-## Research first
-
-Before implementation, review current official Android documentation for:
-
-- `TileService` and `Tile`;
-- `NotificationManager`;
-- `setInterruptionFilter()`;
-- `isNotificationPolicyAccessGranted`;
-- `ACCESS_NOTIFICATION_POLICY`;
-- `AutomaticZenRule`;
-- DND changes for applications targeting Android 15 and newer;
-- `AudioManager.setRingerMode()`;
-- interaction between ringer mode and DND.
-
-The implementation must not assume legacy `setInterruptionFilter()` behavior is
-unchanged on modern Android. Research should establish the cleanest supported
-approach for Android 17/current Pixels and be summarized concisely in
-`RESEARCH.md`.
-
-[TilesOrganization/SimpleTile](https://github.com/TilesOrganization/SimpleTile)
-is an architectural reference for the basic Quick Settings service lifecycle,
-manifest declaration, `getQsTile()`, and `Tile.updateTile()`. It is not a source
-to copy blindly, and old APK binaries should not be reverse-engineered to
-recreate obsolete behavior.
-
-## Intended structure
+Important files:
 
 ```text
-app/src/main/java/.../SoundCycleTileService.kt
-app/src/main/java/.../MainActivity.kt
-app/src/main/java/.../SoundModeController.kt  # only if it improves clarity
-RESEARCH.md
+app/src/main/java/net/hanenashi/tilezz/CycleActivity.kt
+app/src/main/java/net/hanenashi/tilezz/MainActivity.kt
+app/src/main/java/net/hanenashi/tilezz/SoundCycleController.kt
+app/src/main/java/net/hanenashi/tilezz/LauncherIconController.kt
 ```
 
-`SoundCycleTileService` reads the actual state, performs transitions, and
-updates the tile. `MainActivity` handles only the explanation and notification
-policy access. A controller helper may isolate DND/ringer logic and API-version
-differences if that makes the implementation clearer.
+`CycleActivity` is a tiny transparent foreground activity used for the launcher icon action. `MainActivity` is the settings screen. `SoundCycleController` owns the DND/ringer-mode transition logic. `LauncherIconController` switches the enabled launcher alias so the home-screen icon reflects the observed mode.
 
-Manifest requirements are expected to include:
+The Android package remains `net.hanenashi.tilezz` to avoid reinstall/permission churn from package migration.
 
-- `android.permission.ACCESS_NOTIFICATION_POLICY`;
-- a `TileService` guarded by
-  `android.permission.BIND_QUICK_SETTINGS_TILE`;
-- the `android.service.quicksettings.action.QS_TILE` intent action.
-
-## Development phases
-
-### 1. Research
-
-Inspect SimpleTile and current official Android documentation. Create
-`RESEARCH.md` covering reusable architectural concepts, likely causes of the
-legacy failure, current DND restrictions, and the proposed implementation.
-
-### 2. Minimal project
-
-Create a fresh Android project with the launcher activity, tile service,
-manifest declarations, permission flow, and basic vector icon. Confirm that the
-APK builds, installs, and appears in the Quick Settings tile picker.
-
-### 3. State detection
-
-Implement reliable detection of DND, vibrate, and normal modes. Add focused
-debug logging and verify that external state changes are observed.
-
-### 4. State switching
-
-Implement and test each transition independently:
-
-- DND → Vibrate
-- Vibrate → Normal
-- Normal → DND
-
-Pay particular attention to DND → Vibrate and Normal → DND because modern
-notification policy behavior is likely to make these transitions the most
-complex.
-
-### 5. Tile presentation
-
-Update the icon, label, and active/inactive state according to the actual phone
-state. Refresh during `onStartListening()` and after `onClick()`.
-
-### 6. Real-device testing
-
-Build and install a debug APK on the Pixel. Use ADB logs to diagnose failures.
-Test:
-
-- fresh installation;
-- access missing and access granted;
-- every individual transition;
-- repeated cycling;
-- external sound-mode changes;
-- reboot;
-- tile removal and re-addition;
-- app update over an existing installation.
-
-## Engineering constraints
-
-Prefer:
-
-- Kotlin;
-- standard Android SDK;
-- AndroidX only where useful;
-- Gradle Kotlin DSL for the fresh project;
-- minimal dependencies;
-- incremental, build-tested changes.
-
-Avoid:
-
-- Jetpack Compose without a concrete need;
-- databases, networking, accounts, analytics, ads, or telemetry;
-- unrelated background services;
-- third-party libraries and architecture frameworks without a clear benefit;
-- speculative bulk implementation before API research and build verification.
-
-When behavior requires a physical device, document the exact test and useful
-logs rather than claiming it works from build success alone.
-
-## Success criteria
-
-音OFF is complete when:
-
-- the APK builds with the current Android toolchain;
-- it installs on the Pixel 10a;
-- its tile can be added normally;
-- permission guidance works clearly;
-- taps produce 音OFF DND → Vibrate → Normal → 音OFF DND;
-- external DND remains untouched and is represented honestly;
-- transitions use actual system state, not a stored counter;
-- presentation reflects current state;
-- behavior survives app restarts and phone reboots;
-- no unnecessary functionality is included.
-
-Possible future work—configurable order, silent mode, selectable DND modes,
-long-press configuration, or additional tiles—is explicitly out of scope for
-the first version.
-
-## Live Pixel status
+## Validation
 
 Verified on Teneichan, a Pixel 10a running Android 17/API 37:
 
-- debug APK installs successfully;
-- DND policy access can be granted with Android settings or ADB;
-- visible activity cycle works: Sound → 音OFF DND → Vibrate → Sound;
-- Quick Settings tile cycle works via SystemUI:
-  Sound → 音OFF DND → Vibrate → Sound;
-- Quick Settings tile shows mode-specific icons and Toast feedback;
-- Quick Settings tile routes through a short-lived transparent activity so
-  Android 17 treats the action as foreground user-initiated work;
-- the same tile cycle works with `cmd audio set-hardening throw`;
-- external/manual DND remains active when 音OFF does not own the active DND
-  state.
+- debug APK builds and installs successfully;
+- launcher icon cycles Sound ↔ Vibrate with DND excluded;
+- optional DND cycle enters and exits 音OFF's app-associated DND rule;
+- stale internal DND preference state does not leave 音OFF-owned DND stuck on;
+- external/manual DND remains active when 音OFF does not own the active DND state;
+- app display label is `音OFF`;
+- launcher aliases use mode-specific icons.

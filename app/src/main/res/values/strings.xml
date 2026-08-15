@@ -1,7 +1,6 @@
 <resources>
     <string name="app_name">音OFF</string>
-    <string name="tile_label">Sound mode</string>
-    <string name="explanation">Tap the 音OFF icon to cycle sound modes. Long-press the icon for Settings. The Quick Settings tile is still available as a secondary control.</string>
+    <string name="explanation">Tap the 音OFF icon to cycle sound modes. Long-press the icon for Settings.</string>
     <string name="open_dnd_access">Open Do Not Disturb access</string>
     <string name="access_granted">Do Not Disturb access is granted.</string>
     <string name="access_missing">Do Not Disturb access is not granted.</string>
