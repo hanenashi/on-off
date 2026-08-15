@@ -17,6 +17,8 @@ The project started as a replacement for one useful feature from the abandoned T
 - Tapping the 音OFF launcher icon cycles immediately and exits.
 - Long-pressing the launcher icon exposes a Settings shortcut.
 - Settings can include or exclude DND and Vibrate from the cycle.
+- Settings can follow the Android system language or override 音OFF to English,
+  Japanese, or Czech.
 - Defaults are DND excluded and Vibrate included.
 - The launcher icon switches between Sound, Vibrate, and DND aliases after 音OFF observes the current mode. Android launchers may cache icon state, so visual refresh timing is launcher-dependent.
 - Each successful tap shows a short Toast naming the resulting mode.
@@ -79,4 +81,5 @@ Verified on Teneichan, a Pixel 10a running Android 17/API 37:
 - stale internal DND preference state does not leave 音OFF-owned DND stuck on;
 - external/manual DND remains active when 音OFF does not own the active DND state;
 - app display label is `音OFF`;
-- launcher aliases use mode-specific icons.
+- launcher aliases use mode-specific icons;
+- settings localization works for System default, Japanese, and Czech.

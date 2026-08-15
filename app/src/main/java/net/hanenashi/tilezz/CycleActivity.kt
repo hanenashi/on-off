@@ -1,12 +1,17 @@
 package net.hanenashi.tilezz
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 
 class CycleActivity : Activity() {
     private var cycled = false
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleController.localizedContext(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -8,6 +8,11 @@
     <string name="include_dnd_summary">Add app-owned DND to the cycle.</string>
     <string name="include_vibrate">Include Vibrate</string>
     <string name="include_vibrate_summary">Use Vibrate between Sound and any enabled DND step.</string>
+    <string name="language_section">Language</string>
+    <string name="language_summary">Default follows Android system language. Choose a language here to override it for 音OFF.</string>
+    <string name="language_system">System default</string>
+    <string name="language_japanese">Japanese</string>
+    <string name="language_czech">Czech</string>
     <string name="permission_section">Permission</string>
     <string name="cycle_section">Cycle modes</string>
     <string name="diagnostics_section">Current state</string>
@@ -17,6 +22,12 @@
     <string name="state_dnd">DND</string>
     <string name="state_vibrate">Vibrate</string>
     <string name="state_sound">Sound</string>
+    <string name="mode_label">Mode</string>
+    <string name="cycle_label">Cycle</string>
+    <string name="cycle_sound_dnd_vibrate">Sound → DND → Vibrate</string>
+    <string name="cycle_sound_dnd">Sound ↔ DND</string>
+    <string name="cycle_sound_vibrate">Sound ↔ Vibrate</string>
+    <string name="cycle_sound_only">Sound only</string>
     <string name="toast_missing_access">DND access required</string>
     <string name="toast_external_dnd">External DND still active</string>
     <string name="shortcut_settings_short">Settings</string>

@@ -1,0 +1,5 @@
+<resources>
+    <item name="language_system" type="id" />
+    <item name="language_japanese" type="id" />
+    <item name="language_czech" type="id" />
+</resources>

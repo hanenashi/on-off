@@ -2,6 +2,7 @@ package net.hanenashi.tilezz
 
 import android.app.Activity
 import android.app.NotificationManager
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Typeface
@@ -11,6 +12,8 @@ import android.provider.Settings
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import android.widget.ScrollView
 import android.widget.Switch
 import android.widget.TextView
@@ -22,6 +25,11 @@ class MainActivity : Activity() {
     private lateinit var resultView: TextView
     private lateinit var includeDndSwitch: Switch
     private lateinit var includeVibrateSwitch: Switch
+    private lateinit var languageGroup: RadioGroup
+
+    override fun attachBaseContext(newBase: Context) {
+        super.attachBaseContext(LocaleController.localizedContext(newBase))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +56,30 @@ class MainActivity : Activity() {
                 refreshState()
             }
         }
+        languageGroup = RadioGroup(this).apply {
+            orientation = RadioGroup.VERTICAL
+            addView(languageButton(R.id.language_system, getString(R.string.language_system)))
+            addView(languageButton(R.id.language_japanese, getString(R.string.language_japanese)))
+            addView(languageButton(R.id.language_czech, getString(R.string.language_czech)))
+            check(
+                when (LocaleController.currentLanguage(this@MainActivity)) {
+                    LocaleController.LANGUAGE_JAPANESE -> R.id.language_japanese
+                    LocaleController.LANGUAGE_CZECH -> R.id.language_czech
+                    else -> R.id.language_system
+                },
+            )
+            setOnCheckedChangeListener { _, checkedId ->
+                val language = when (checkedId) {
+                    R.id.language_japanese -> LocaleController.LANGUAGE_JAPANESE
+                    R.id.language_czech -> LocaleController.LANGUAGE_CZECH
+                    else -> LocaleController.LANGUAGE_SYSTEM
+                }
+                if (language != LocaleController.currentLanguage(this@MainActivity)) {
+                    LocaleController.setLanguage(this@MainActivity, language)
+                    recreate()
+                }
+            }
+        }
         val accessButton = Button(this).apply {
             text = getString(R.string.open_dnd_access)
             setOnClickListener {
@@ -60,7 +92,7 @@ class MainActivity : Activity() {
                 val result = SoundCycleController(this@MainActivity).cycle("activity")
                 LauncherIconController(this@MainActivity).updateForCurrentMode(result.after)
                 Toast.makeText(this@MainActivity, result.toastMessageRes(), Toast.LENGTH_SHORT).show()
-                resultView.text = getString(R.string.last_result, result.outcome.name)
+                resultView.text = getString(R.string.last_result, getString(result.toastMessageRes()))
                 refreshState()
             }
         }
@@ -96,6 +128,17 @@ class MainActivity : Activity() {
                 addView(sectionTitle(getString(R.string.cycle_section)))
                 addView(optionCard(includeDndSwitch, getString(R.string.include_dnd_summary)))
                 addView(optionCard(includeVibrateSwitch, getString(R.string.include_vibrate_summary)))
+                addView(sectionTitle(getString(R.string.language_section)))
+                addView(card().apply {
+                    orientation = LinearLayout.VERTICAL
+                    addView(TextView(context).apply {
+                        text = getString(R.string.language_summary)
+                        textSize = 14f
+                        setTextColor(COLOR_MUTED)
+                        setPadding(0, 0, 0, dp(8))
+                    })
+                    addView(languageGroup)
+                })
 
                 addView(sectionTitle(getString(R.string.permission_section)))
                 addView(card().apply {
@@ -128,6 +171,13 @@ class MainActivity : Activity() {
                 ViewGroup.LayoutParams.WRAP_CONTENT,
             ))
         })
+    }
+
+    private fun languageButton(id: Int, text: String): RadioButton = RadioButton(this).apply {
+        this.id = id
+        this.text = text
+        textSize = 16f
+        setTextColor(Color.WHITE)
     }
 
     private fun sectionTitle(text: String): TextView = TextView(this).apply {
@@ -220,16 +270,18 @@ class MainActivity : Activity() {
         val settings = controller.settings()
         LauncherIconController(this).updateForCurrentMode(snapshot)
         stateView.text = buildString {
-            append("Mode: ")
+            append(getString(R.string.mode_label))
+            append(": ")
             append(getString(snapshot.modeLabelRes()))
             append('\n')
-            append("Cycle: ")
+            append(getString(R.string.cycle_label))
+            append(": ")
             append(
                 when {
-                    settings.includeDnd && settings.includeVibrate -> "Sound → DND → Vibrate"
-                    settings.includeDnd -> "Sound ↔ DND"
-                    settings.includeVibrate -> "Sound ↔ Vibrate"
-                    else -> "Sound only"
+                    settings.includeDnd && settings.includeVibrate -> getString(R.string.cycle_sound_dnd_vibrate)
+                    settings.includeDnd -> getString(R.string.cycle_sound_dnd)
+                    settings.includeVibrate -> getString(R.string.cycle_sound_vibrate)
+                    else -> getString(R.string.cycle_sound_only)
                 },
             )
         }

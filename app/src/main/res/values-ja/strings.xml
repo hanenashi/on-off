@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">音OFF</string>
+    <string name="explanation">音OFFアイコンをタップするとサウンドモードを切り替えます。設定はアイコンの長押しから開けます。</string>
+    <string name="open_dnd_access">サイレントモードへのアクセスを開く</string>
+    <string name="access_granted">サイレントモードへのアクセスは許可されています。</string>
+    <string name="access_missing">サイレントモードへのアクセスは許可されていません。</string>
+    <string name="include_dnd">サイレントモードを含める</string>
+    <string name="include_dnd_summary">音OFFが管理するサイレントモードを切り替えに追加します。</string>
+    <string name="include_vibrate">バイブを含める</string>
+    <string name="include_vibrate_summary">音ありとサイレントモードの間にバイブを使います。</string>
+    <string name="language_section">言語</string>
+    <string name="language_summary">初期設定ではAndroidのシステム言語に従います。ここで音OFFだけの言語を選べます。</string>
+    <string name="language_system">システム設定</string>
+    <string name="language_japanese">日本語</string>
+    <string name="language_czech">チェコ語</string>
+    <string name="permission_section">権限</string>
+    <string name="cycle_section">切り替えモード</string>
+    <string name="diagnostics_section">現在の状態</string>
+    <string name="settings_title">音OFF設定</string>
+    <string name="cycle_now">今すぐ切り替え</string>
+    <string name="last_result">前回の結果: %1$s</string>
+    <string name="state_dnd">サイレント</string>
+    <string name="state_vibrate">バイブ</string>
+    <string name="state_sound">音あり</string>
+    <string name="mode_label">モード</string>
+    <string name="cycle_label">切り替え</string>
+    <string name="cycle_sound_dnd_vibrate">音あり → サイレント → バイブ</string>
+    <string name="cycle_sound_dnd">音あり ↔ サイレント</string>
+    <string name="cycle_sound_vibrate">音あり ↔ バイブ</string>
+    <string name="cycle_sound_only">音ありのみ</string>
+    <string name="toast_missing_access">サイレントモードへのアクセスが必要です</string>
+    <string name="toast_external_dnd">外部のサイレントモードが有効です</string>
+    <string name="shortcut_settings_short">設定</string>
+    <string name="shortcut_settings_long">音OFF設定</string>
+</resources>

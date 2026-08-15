@@ -1,0 +1,35 @@
+<resources>
+    <string name="app_name">音OFF</string>
+    <string name="explanation">Klepnutím na ikonu 音OFF přepnete režim zvuku. Nastavení otevřete dlouhým stiskem ikony.</string>
+    <string name="open_dnd_access">Otevřít přístup k režimu Nerušit</string>
+    <string name="access_granted">Přístup k režimu Nerušit je povolen.</string>
+    <string name="access_missing">Přístup k režimu Nerušit není povolen.</string>
+    <string name="include_dnd">Zahrnout Nerušit</string>
+    <string name="include_dnd_summary">Přidá do cyklu režim Nerušit spravovaný touto aplikací.</string>
+    <string name="include_vibrate">Zahrnout vibrace</string>
+    <string name="include_vibrate_summary">Použije vibrace mezi zvukem a případným krokem Nerušit.</string>
+    <string name="language_section">Jazyk</string>
+    <string name="language_summary">Výchozí nastavení sleduje jazyk systému Android. Zde můžete jazyk pro 音OFF přepsat.</string>
+    <string name="language_system">Podle systému</string>
+    <string name="language_japanese">Japonština</string>
+    <string name="language_czech">Čeština</string>
+    <string name="permission_section">Oprávnění</string>
+    <string name="cycle_section">Režimy cyklu</string>
+    <string name="diagnostics_section">Aktuální stav</string>
+    <string name="settings_title">Nastavení 音OFF</string>
+    <string name="cycle_now">Přepnout nyní</string>
+    <string name="last_result">Poslední výsledek: %1$s</string>
+    <string name="state_dnd">Nerušit</string>
+    <string name="state_vibrate">Vibrace</string>
+    <string name="state_sound">Zvuk</string>
+    <string name="mode_label">Režim</string>
+    <string name="cycle_label">Cyklus</string>
+    <string name="cycle_sound_dnd_vibrate">Zvuk → Nerušit → Vibrace</string>
+    <string name="cycle_sound_dnd">Zvuk ↔ Nerušit</string>
+    <string name="cycle_sound_vibrate">Zvuk ↔ Vibrace</string>
+    <string name="cycle_sound_only">Pouze zvuk</string>
+    <string name="toast_missing_access">Je potřeba přístup k režimu Nerušit</string>
+    <string name="toast_external_dnd">Externí režim Nerušit je stále aktivní</string>
+    <string name="shortcut_settings_short">Nastavení</string>
+    <string name="shortcut_settings_long">Nastavení 音OFF</string>
+</resources>
