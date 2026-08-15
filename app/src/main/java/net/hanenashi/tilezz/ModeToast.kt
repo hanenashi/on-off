@@ -16,7 +16,7 @@ object ModeToast {
     private const val DISMISS_DELAY_MS = 760L
     private const val SCREEN_TOP_FRACTION = 0.33f
 
-    fun show(activity: Activity, result: CycleResult) {
+    fun show(activity: Activity, result: CycleResult, onFinished: () -> Unit = {}) {
         val root = activity.window.decorView as? ViewGroup ?: return
         val oldToast = root.findViewWithTag<View>(TAG)
         oldToast?.let { root.removeView(it) }
@@ -73,6 +73,7 @@ object ModeToast {
                             if (toast.parent === root) {
                                 root.removeView(toast)
                             }
+                            onFinished()
                         }
                         .start()
                 }, DISMISS_DELAY_MS)
