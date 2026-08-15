@@ -17,8 +17,8 @@ The project started as a replacement for one useful feature from the abandoned T
 - Tapping the 音OFF launcher icon cycles immediately and exits.
 - Long-pressing the launcher icon exposes a Settings shortcut.
 - Settings can include or exclude DND and Vibrate from the cycle.
-- Settings can follow the Android system language or override 音OFF to English,
-  Japanese, or Czech.
+- Settings default to the Android system language and can explicitly override
+  音OFF to English, Japanese, or Czech.
 - Defaults are DND excluded and Vibrate included.
 - The launcher icon switches between Sound, Vibrate, and DND aliases after 音OFF observes the current mode. Android launchers may cache icon state, so visual refresh timing is launcher-dependent.
 - Each successful tap shows a short Toast naming the resulting mode.

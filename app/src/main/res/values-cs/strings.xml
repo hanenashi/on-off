@@ -9,8 +9,9 @@
     <string name="include_vibrate">Zahrnout vibrace</string>
     <string name="include_vibrate_summary">Použije vibrace mezi zvukem a případným krokem Nerušit.</string>
     <string name="language_section">Jazyk</string>
-    <string name="language_summary">Výchozí nastavení sleduje jazyk systému Android. Zde můžete jazyk pro 音OFF přepsat.</string>
+    <string name="language_summary">Volba podle systému sleduje jazyk Androidu. Angličtina, japonština nebo čeština přepíše jazyk pouze pro 音OFF.</string>
     <string name="language_system">Podle systému</string>
+    <string name="language_english">Angličtina</string>
     <string name="language_japanese">Japonština</string>
     <string name="language_czech">Čeština</string>
     <string name="permission_section">Oprávnění</string>

@@ -9,8 +9,9 @@
     <string name="include_vibrate">バイブを含める</string>
     <string name="include_vibrate_summary">音ありとサイレントモードの間にバイブを使います。</string>
     <string name="language_section">言語</string>
-    <string name="language_summary">初期設定ではAndroidのシステム言語に従います。ここで音OFFだけの言語を選べます。</string>
+    <string name="language_summary">システム設定はAndroidの言語に従います。英語・日本語・チェコ語を選ぶと音OFFだけに適用されます。</string>
     <string name="language_system">システム設定</string>
+    <string name="language_english">英語</string>
     <string name="language_japanese">日本語</string>
     <string name="language_czech">チェコ語</string>
     <string name="permission_section">権限</string>

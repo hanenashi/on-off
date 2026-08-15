@@ -59,10 +59,12 @@ class MainActivity : Activity() {
         languageGroup = RadioGroup(this).apply {
             orientation = RadioGroup.VERTICAL
             addView(languageButton(R.id.language_system, getString(R.string.language_system)))
+            addView(languageButton(R.id.language_english, getString(R.string.language_english)))
             addView(languageButton(R.id.language_japanese, getString(R.string.language_japanese)))
             addView(languageButton(R.id.language_czech, getString(R.string.language_czech)))
             check(
                 when (LocaleController.currentLanguage(this@MainActivity)) {
+                    LocaleController.LANGUAGE_ENGLISH -> R.id.language_english
                     LocaleController.LANGUAGE_JAPANESE -> R.id.language_japanese
                     LocaleController.LANGUAGE_CZECH -> R.id.language_czech
                     else -> R.id.language_system
@@ -70,13 +72,14 @@ class MainActivity : Activity() {
             )
             setOnCheckedChangeListener { _, checkedId ->
                 val language = when (checkedId) {
+                    R.id.language_english -> LocaleController.LANGUAGE_ENGLISH
                     R.id.language_japanese -> LocaleController.LANGUAGE_JAPANESE
                     R.id.language_czech -> LocaleController.LANGUAGE_CZECH
                     else -> LocaleController.LANGUAGE_SYSTEM
                 }
                 if (language != LocaleController.currentLanguage(this@MainActivity)) {
                     LocaleController.setLanguage(this@MainActivity, language)
-                    recreate()
+                    restartSettings()
                 }
             }
         }
@@ -178,6 +181,14 @@ class MainActivity : Activity() {
         this.text = text
         textSize = 16f
         setTextColor(Color.WHITE)
+    }
+
+    private fun restartSettings() {
+        startActivity(Intent(this, MainActivity::class.java).apply {
+            addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        })
+        finish()
+        overridePendingTransition(0, 0)
     }
 
     private fun sectionTitle(text: String): TextView = TextView(this).apply {

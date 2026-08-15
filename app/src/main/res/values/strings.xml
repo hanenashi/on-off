@@ -9,8 +9,9 @@
     <string name="include_vibrate">Include Vibrate</string>
     <string name="include_vibrate_summary">Use Vibrate between Sound and any enabled DND step.</string>
     <string name="language_section">Language</string>
-    <string name="language_summary">Default follows Android system language. Choose a language here to override it for 音OFF.</string>
+    <string name="language_summary">System default follows Android. Choose English, Japanese, or Czech to override it for 音OFF.</string>
     <string name="language_system">System default</string>
+    <string name="language_english">English</string>
     <string name="language_japanese">Japanese</string>
     <string name="language_czech">Czech</string>
     <string name="permission_section">Permission</string>

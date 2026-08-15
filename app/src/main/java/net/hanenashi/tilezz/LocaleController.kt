@@ -8,6 +8,7 @@ import android.os.LocaleList
 
 object LocaleController {
     const val LANGUAGE_SYSTEM = "system"
+    const val LANGUAGE_ENGLISH = "en"
     const val LANGUAGE_JAPANESE = "ja"
     const val LANGUAGE_CZECH = "cs"
 
@@ -19,6 +20,7 @@ object LocaleController {
             .applicationLocales
             .toLanguageTags()
         return when (tags) {
+            LANGUAGE_ENGLISH -> LANGUAGE_ENGLISH
             LANGUAGE_JAPANESE -> LANGUAGE_JAPANESE
             LANGUAGE_CZECH -> LANGUAGE_CZECH
             else -> LANGUAGE_SYSTEM
@@ -30,6 +32,7 @@ object LocaleController {
             return
         }
         val tags = when (language) {
+            LANGUAGE_ENGLISH -> LANGUAGE_ENGLISH
             LANGUAGE_JAPANESE -> LANGUAGE_JAPANESE
             LANGUAGE_CZECH -> LANGUAGE_CZECH
             else -> ""
