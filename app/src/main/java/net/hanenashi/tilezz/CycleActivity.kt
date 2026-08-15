@@ -14,6 +14,7 @@ class CycleActivity : Activity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        overridePendingTransition(0, 0)
     }
 
     override fun onResume() {
@@ -31,7 +32,15 @@ class CycleActivity : Activity() {
                 addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             })
         }
-        window.decorView.postDelayed({ finishAndRemoveTask() }, FINISH_DELAY_MS)
+        window.decorView.postDelayed({
+            finishAndRemoveTask()
+            overridePendingTransition(0, 0)
+        }, FINISH_DELAY_MS)
+    }
+
+    override fun finish() {
+        super.finish()
+        overridePendingTransition(0, 0)
     }
 
     companion object {
