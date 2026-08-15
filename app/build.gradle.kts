@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "net.hanenashi.tilezz"
+    namespace = "net.hanenashi.onoff"
     compileSdk = 37
 
     defaultConfig {
-        applicationId = "net.hanenashi.tilezz"
+        applicationId = "net.hanenashi.onoff"
         minSdk = 29
         targetSdk = 37
         versionCode = 2

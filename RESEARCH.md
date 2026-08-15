@@ -133,11 +133,11 @@ ADB setup:
 Validated:
 
 - debug install succeeds;
-- `cmd notification allow_dnd net.hanenashi.tilezz` grants policy access;
+- `cmd notification allow_dnd net.hanenashi.onoff` grants policy access;
 - visible activity cycle:
   `SoundToTilezzDnd`, `TilezzDndToVibrate`, `VibrateToSound`;
 - Quick Settings tile cycle through `cmd statusbar expand-settings` +
-  `cmd statusbar click-tile net.hanenashi.tilezz/.SoundCycleTileService`;
+  `cmd statusbar click-tile net.hanenashi.onoff/.SoundCycleTileService`;
 - hardening throw mode via `cmd audio set-hardening throw`;
 - DND-to-vibrate needs a short stable-read retry after disabling DND;
 - tile clicks should route through `CycleActivity`; doing the work directly in

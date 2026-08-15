@@ -1,4 +1,4 @@
-package net.hanenashi.tilezz
+package net.hanenashi.onoff
 
 import android.content.ComponentName
 import android.content.Context

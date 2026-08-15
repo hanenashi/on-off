@@ -8,7 +8,7 @@
         android:shortcutShortLabel="@string/shortcut_settings_short">
         <intent
             android:action="android.intent.action.VIEW"
-            android:targetClass="net.hanenashi.tilezz.MainActivity"
-            android:targetPackage="net.hanenashi.tilezz" />
+            android:targetClass="net.hanenashi.onoff.MainActivity"
+            android:targetPackage="net.hanenashi.onoff" />
     </shortcut>
 </shortcuts>

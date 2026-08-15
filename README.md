@@ -63,15 +63,15 @@ If access is missing, the app opens its settings screen and provides a button to
 Important files:
 
 ```text
-app/src/main/java/net/hanenashi/tilezz/CycleActivity.kt
-app/src/main/java/net/hanenashi/tilezz/MainActivity.kt
-app/src/main/java/net/hanenashi/tilezz/SoundCycleController.kt
-app/src/main/java/net/hanenashi/tilezz/LauncherIconController.kt
+app/src/main/java/net/hanenashi/onoff/CycleActivity.kt
+app/src/main/java/net/hanenashi/onoff/MainActivity.kt
+app/src/main/java/net/hanenashi/onoff/SoundCycleController.kt
+app/src/main/java/net/hanenashi/onoff/LauncherIconController.kt
 ```
 
 `CycleActivity` is a tiny transparent foreground activity used for the launcher icon action. `MainActivity` is the settings screen. `SoundCycleController` owns the DND/ringer-mode transition logic. `LauncherIconController` switches the enabled launcher alias so the home-screen icon reflects the observed mode.
 
-The Android package remains `net.hanenashi.tilezz` to avoid reinstall/permission churn from package migration.
+The Android package is `net.hanenashi.onoff`.
 
 ## Validation
 
