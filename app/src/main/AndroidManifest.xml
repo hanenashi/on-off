@@ -7,7 +7,7 @@
         android:allowBackup="false"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
-        android:icon="@drawable/ic_tile_sound"
+        android:icon="@mipmap/ic_tile_sound"
         android:label="@string/app_name"
         android:localeConfig="@xml/locales_config"
         android:supportsRtl="true"
@@ -31,7 +31,7 @@
             android:name=".LauncherSound"
             android:enabled="true"
             android:exported="true"
-            android:icon="@drawable/ic_tile_sound"
+            android:icon="@mipmap/ic_tile_sound"
             android:label="@string/app_name"
             android:targetActivity=".CycleActivity">
             <intent-filter>
@@ -47,7 +47,7 @@
             android:name=".LauncherVibrate"
             android:enabled="false"
             android:exported="true"
-            android:icon="@drawable/ic_tile_vibrate"
+            android:icon="@mipmap/ic_tile_vibrate"
             android:label="@string/app_name"
             android:targetActivity=".CycleActivity">
             <intent-filter>
@@ -63,7 +63,7 @@
             android:name=".LauncherDnd"
             android:enabled="false"
             android:exported="true"
-            android:icon="@drawable/ic_tile_dnd"
+            android:icon="@mipmap/ic_tile_dnd"
             android:label="@string/app_name"
             android:targetActivity=".CycleActivity">
             <intent-filter>
