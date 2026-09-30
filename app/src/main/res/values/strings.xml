@@ -9,6 +9,9 @@
     <string name="include_vibrate">Include Vibrate</string>
     <string name="include_vibrate_summary">Use Vibrate between Sound and any enabled DND step.</string>
     <string name="language_section">Language</string>
+    <string name="feedback_section">Tap feedback</string>
+    <string name="tap_vibration">Vibrate on icon tap</string>
+    <string name="tap_vibration_summary">A short vibration confirms an icon tap before the mode and icon update. Android touch vibration must also be enabled.</string>
     <string name="language_summary">System default follows Android. Choose English, Japanese, or Czech to override it for 音OFF.</string>
     <string name="language_system">System default</string>
     <string name="language_english">English</string>

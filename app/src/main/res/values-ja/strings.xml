@@ -9,6 +9,9 @@
     <string name="include_vibrate">バイブを含める</string>
     <string name="include_vibrate_summary">音ありとサイレントモードの間にバイブを使います。</string>
     <string name="language_section">言語</string>
+    <string name="feedback_section">タップのフィードバック</string>
+    <string name="tap_vibration">アイコンのタップ時に振動</string>
+    <string name="tap_vibration_summary">モードとアイコンが更新される前に、短い振動でタップを知らせます。Androidのタッチ操作の振動も有効にしてください。</string>
     <string name="language_summary">システム設定はAndroidの言語に従います。英語・日本語・チェコ語を選ぶと音OFFだけに適用されます。</string>
     <string name="language_system">システム設定</string>
     <string name="language_english">英語</string>

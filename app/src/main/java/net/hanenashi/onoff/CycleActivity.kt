@@ -25,6 +25,7 @@ class CycleActivity : Activity() {
         }
         cycled = true
 
+        TapFeedback(this).vibrate()
         val result = SoundCycleController(this).cycle("launcher")
         LauncherIconController(this).updateForCurrentMode(result.after)
         window.decorView.postDelayed({

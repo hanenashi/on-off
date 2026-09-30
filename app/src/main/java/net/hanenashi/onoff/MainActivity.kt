@@ -55,6 +55,14 @@ class MainActivity : Activity() {
                 refreshState()
             }
         }
+        val tapFeedback = TapFeedback(this)
+        val tapVibrationSwitch = Switch(this).apply {
+            text = getString(R.string.tap_vibration)
+            isChecked = tapFeedback.isEnabled()
+            setOnCheckedChangeListener { _, checked ->
+                tapFeedback.setEnabled(checked)
+            }
+        }
         languageGroup = RadioGroup(this).apply {
             orientation = RadioGroup.VERTICAL
             addView(languageButton(R.id.language_system, getString(R.string.language_system)))
@@ -130,6 +138,8 @@ class MainActivity : Activity() {
                 addView(sectionTitle(getString(R.string.cycle_section)))
                 addView(optionCard(includeDndSwitch, getString(R.string.include_dnd_summary)))
                 addView(optionCard(includeVibrateSwitch, getString(R.string.include_vibrate_summary)))
+                addView(sectionTitle(getString(R.string.feedback_section)))
+                addView(optionCard(tapVibrationSwitch, getString(R.string.tap_vibration_summary)))
                 addView(sectionTitle(getString(R.string.language_section)))
                 addView(card().apply {
                     orientation = LinearLayout.VERTICAL

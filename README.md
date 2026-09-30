@@ -17,6 +17,7 @@ The project started as a replacement for one useful feature from the abandoned T
 ## Current behavior
 
 - Tapping the 音OFF launcher icon cycles immediately and exits.
+- Launcher taps give a short vibration before cycling, enabled by default and switchable in Settings under Tap feedback. Android touch-feedback settings still apply.
 - Long-pressing the launcher icon exposes a Settings shortcut.
 - Settings can include or exclude DND and Vibrate from the cycle.
 - Settings default to the Android system language and can explicitly override
