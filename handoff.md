@@ -1,5 +1,15 @@
 # 音OFF handoff
 
+## October 2026 launcher update
+
+- The home-screen control is now a pinned shortcut (`cycle`) with a stable target, `LauncherSound`. Its artwork changes with the observed sound mode.
+- The regular app-drawer icon stays fixed, still cycles modes, and retains the long-press Settings action. Settings includes an Add home-screen shortcut button in English, Czech, and Japanese.
+- `LauncherShortcutController.kt` replaces `LauncherIconController.kt`. Never disable launcher components on mode changes: Microsoft Launcher was observed launching stale disabled aliases and reporting “App isn’t installed”, including after trying atomic batch changes.
+- Old `LauncherVibrate`/`LauncherDnd` aliases remain enabled with no launcher intent filters. `AppUpdateReceiver` clears persisted component overrides on upgrade; activity paths also perform this migration if necessary.
+- `TapFeedback.kt` provides an optional double buzz (90 ms on, 80 ms off, 150 ms on), enabled by default. It uses touch-vibration attributes and respects Android touch-feedback settings.
+- Users upgrading from alias-based icons should replace the old home-screen icon with the pinned shortcut once. The earlier sections below describe historical releases.
+- Live checks on Teneichan / Microsoft Launcher: pinned shortcut added and moved into the old icon position; repeated launches retained the same target without the former `-92` missing-activity errors; double-buzz waveform completed. Microsoft Launcher does not show the app Settings action on the pinned shortcut itself; long-press the regular 音OFF entry in the app drawer for Settings.
+
 ## Current state
 
 音OFF is a small Android utility that cycles the device's real sound state from its launcher icon. The default cycle is Sound ↔ Vibrate. Users can optionally include an app-associated Do Not Disturb step.

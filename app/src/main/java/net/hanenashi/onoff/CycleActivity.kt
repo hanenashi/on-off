@@ -27,7 +27,7 @@ class CycleActivity : Activity() {
 
         TapFeedback(this).vibrate()
         val result = SoundCycleController(this).cycle("launcher")
-        LauncherIconController(this).updateForCurrentMode(result.after)
+        LauncherShortcutController(this).updateForCurrentMode(result.after)
         window.decorView.postDelayed({
             ModeToast.show(this, result)
             finishCycleActivity()

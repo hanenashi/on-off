@@ -1,6 +1,12 @@
 <resources>
     <string name="app_name">音OFF</string>
     <string name="explanation">Tap the 音OFF icon to cycle sound modes. Long-press the icon for Settings.</string>
+    <string name="home_shortcut_section">Home-screen shortcut</string>
+    <string name="home_shortcut_summary">Add a shortcut whose picture follows the sound mode. Replace your old home-screen icon with it. The regular app icon stays fixed and still cycles modes; long-press it for Settings.</string>
+    <string name="add_home_shortcut">Add home-screen shortcut</string>
+    <string name="confirm_home_shortcut">Confirm the shortcut in your launcher.</string>
+    <string name="shortcut_not_supported">Your launcher does not support adding shortcuts here. The regular app icon still cycles modes.</string>
+    <string name="cycle_shortcut_long">Cycle sound mode</string>
     <string name="open_dnd_access">Open Do Not Disturb access</string>
     <string name="access_granted">Do Not Disturb access is granted.</string>
     <string name="access_missing">Do Not Disturb access is not granted.</string>
@@ -11,7 +17,7 @@
     <string name="language_section">Language</string>
     <string name="feedback_section">Tap feedback</string>
     <string name="tap_vibration">Vibrate on icon tap</string>
-    <string name="tap_vibration_summary">A short vibration confirms an icon tap before the mode and icon update. Android touch vibration must also be enabled.</string>
+    <string name="tap_vibration_summary">Two buzzes confirm an icon tap before the mode and icon update. Android touch vibration must also be enabled.</string>
     <string name="language_summary">System default follows Android. Choose English, Japanese, or Czech to override it for 音OFF.</string>
     <string name="language_system">System default</string>
     <string name="language_english">English</string>

@@ -17,13 +17,14 @@ The project started as a replacement for one useful feature from the abandoned T
 ## Current behavior
 
 - Tapping the 音OFF launcher icon cycles immediately and exits.
-- Launcher taps give a short vibration before cycling, enabled by default and switchable in Settings under Tap feedback. Android touch-feedback settings still apply.
+- Launcher taps give two vibration pulses before cycling, enabled by default and switchable in Settings under Tap feedback. Android touch-feedback settings still apply.
 - Long-pressing the launcher icon exposes a Settings shortcut.
 - Settings can include or exclude DND and Vibrate from the cycle.
 - Settings default to the Android system language and can explicitly override
   音OFF to English, Japanese, or Czech.
 - Defaults are DND excluded and Vibrate included.
-- The launcher icon switches between Sound, Vibrate, and DND aliases after 音OFF observes the current mode. Android launchers may cache icon state, so visual refresh timing is launcher-dependent.
+- Settings → Add home-screen shortcut creates a pinned shortcut with Sound, Vibrate, and DND artwork. Replace the old home-screen app icon with this shortcut once.
+- The pinned shortcut keeps the same ID and tap target while its image updates. A delayed image refresh cannot disable the button. The regular app-drawer icon stays fixed and still cycles modes.
 - Each successful tap shows a short Toast naming the resulting mode.
 
 ## Primary target
@@ -67,10 +68,12 @@ Important files:
 app/src/main/java/net/hanenashi/onoff/CycleActivity.kt
 app/src/main/java/net/hanenashi/onoff/MainActivity.kt
 app/src/main/java/net/hanenashi/onoff/SoundCycleController.kt
-app/src/main/java/net/hanenashi/onoff/LauncherIconController.kt
+app/src/main/java/net/hanenashi/onoff/LauncherShortcutController.kt
 ```
 
-`CycleActivity` is a tiny transparent foreground activity used for the launcher icon action. `MainActivity` is the settings screen. `SoundCycleController` owns the DND/ringer-mode transition logic. `LauncherIconController` switches the enabled launcher alias so the home-screen icon reflects the observed mode.
+`CycleActivity` is a tiny transparent foreground activity used for the launcher action. `MainActivity` is the settings screen. `SoundCycleController` owns the DND/ringer-mode transition logic. `LauncherShortcutController` updates the pinned `cycle` shortcut without changing its identity or disabling launcher components.
+
+`LauncherSound` is the permanent app-drawer entry. Legacy `LauncherVibrate` and `LauncherDnd` aliases remain enabled but have no launcher intent filters, allowing cached old explicit intents to work without creating extra app-drawer icons. `AppUpdateReceiver` and the activity entry paths reset old persisted disabled-component overrides during migration. Do not restore mode-dependent alias toggling: Microsoft Launcher can retain the disabled target and show “App isn’t installed” during refresh.
 
 The Android package is `net.hanenashi.onoff`.
 
@@ -84,5 +87,5 @@ Verified on Teneichan, a Pixel 10a running Android 17/API 37:
 - stale internal DND preference state does not leave 音OFF-owned DND stuck on;
 - external/manual DND remains active when 音OFF does not own the active DND state;
 - app display label is `音OFF`;
-- launcher aliases use mode-specific icons;
+- pinned shortcut uses mode-specific artwork with a stable launch target;
 - settings localization works for System default, Japanese, and Czech.

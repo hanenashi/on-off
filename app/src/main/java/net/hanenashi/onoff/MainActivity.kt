@@ -17,6 +17,7 @@ import android.widget.RadioGroup
 import android.widget.ScrollView
 import android.widget.Switch
 import android.widget.TextView
+import android.widget.Toast
 
 class MainActivity : Activity() {
     private lateinit var statusView: TextView
@@ -25,6 +26,8 @@ class MainActivity : Activity() {
     private lateinit var includeDndSwitch: Switch
     private lateinit var includeVibrateSwitch: Switch
     private lateinit var languageGroup: RadioGroup
+    private lateinit var pinShortcutButton: Button
+    private lateinit var shortcutSummary: TextView
 
     override fun attachBaseContext(newBase: Context) {
         super.attachBaseContext(LocaleController.localizedContext(newBase))
@@ -35,6 +38,25 @@ class MainActivity : Activity() {
 
         val controller = SoundCycleController(this)
         val settings = controller.settings()
+
+        shortcutSummary = TextView(this).apply {
+            textSize = 14f
+            setTextColor(COLOR_MUTED)
+        }
+        pinShortcutButton = Button(this).apply {
+            text = getString(R.string.add_home_shortcut)
+            background = rounded(COLOR_ACCENT, dp(16))
+            setTextColor(Color.rgb(10, 13, 24))
+            setOnClickListener {
+                val requested = LauncherShortcutController(this@MainActivity)
+                    .requestPin(SoundCycleController(this@MainActivity).snapshot())
+                Toast.makeText(
+                    this@MainActivity,
+                    if (requested) R.string.confirm_home_shortcut else R.string.shortcut_not_supported,
+                    Toast.LENGTH_LONG,
+                ).show()
+            }
+        }
 
         statusView = TextView(this).apply {
             textSize = 18f
@@ -100,7 +122,7 @@ class MainActivity : Activity() {
             text = getString(R.string.cycle_now)
             setOnClickListener {
                 val result = SoundCycleController(this@MainActivity).cycle("activity")
-                LauncherIconController(this@MainActivity).updateForCurrentMode(result.after)
+                LauncherShortcutController(this@MainActivity).updateForCurrentMode(result.after)
                 ModeToast.show(this@MainActivity, result)
                 resultView.text = getString(R.string.last_result, getString(result.toastMessageRes()))
                 refreshState()
@@ -135,6 +157,12 @@ class MainActivity : Activity() {
                     setPadding(0, dp(8), 0, dp(20))
                 })
 
+                addView(sectionTitle(getString(R.string.home_shortcut_section)))
+                addView(card().apply {
+                    orientation = LinearLayout.VERTICAL
+                    addView(shortcutSummary)
+                    addView(pinShortcutButton, buttonParams())
+                })
                 addView(sectionTitle(getString(R.string.cycle_section)))
                 addView(optionCard(includeDndSwitch, getString(R.string.include_dnd_summary)))
                 addView(optionCard(includeVibrateSwitch, getString(R.string.include_vibrate_summary)))
@@ -288,7 +316,12 @@ class MainActivity : Activity() {
         val controller = SoundCycleController(this)
         val snapshot = controller.snapshot()
         val settings = controller.settings()
-        LauncherIconController(this).updateForCurrentMode(snapshot)
+        val shortcuts = LauncherShortcutController(this)
+        shortcuts.updateForCurrentMode(snapshot)
+        pinShortcutButton.isEnabled = shortcuts.isPinningSupported()
+        shortcutSummary.text = getString(
+            if (pinShortcutButton.isEnabled) R.string.home_shortcut_summary else R.string.shortcut_not_supported,
+        )
         stateView.text = buildString {
             append(getString(R.string.mode_label))
             append(": ")

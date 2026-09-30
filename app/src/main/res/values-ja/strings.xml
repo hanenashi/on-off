@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">音OFF</string>
+    <string name="home_shortcut_section">ホーム画面のショートカット</string>
+    <string name="home_shortcut_summary">サウンドモードに合わせて画像が変わるショートカットを追加し、ホーム画面の古いアイコンと置き換えてください。通常のアプリアイコンの画像は変わりませんが、タップでモードを切り替え、長押しで設定を開けます。</string>
+    <string name="add_home_shortcut">ホーム画面に追加</string>
+    <string name="confirm_home_shortcut">ランチャーでショートカットの追加を確認してください。</string>
+    <string name="shortcut_not_supported">このランチャーはここからのショートカット追加に対応していません。通常のアプリアイコンでもモードを切り替えられます。</string>
+    <string name="cycle_shortcut_long">サウンドモードを切り替え</string>
     <string name="explanation">音OFFアイコンをタップするとサウンドモードを切り替えます。設定はアイコンの長押しから開けます。</string>
     <string name="open_dnd_access">サイレントモードへのアクセスを開く</string>
     <string name="access_granted">サイレントモードへのアクセスは許可されています。</string>
@@ -11,7 +17,7 @@
     <string name="language_section">言語</string>
     <string name="feedback_section">タップのフィードバック</string>
     <string name="tap_vibration">アイコンのタップ時に振動</string>
-    <string name="tap_vibration_summary">モードとアイコンが更新される前に、短い振動でタップを知らせます。Androidのタッチ操作の振動も有効にしてください。</string>
+    <string name="tap_vibration_summary">モードとアイコンが更新される前に、2回の振動でタップを知らせます。Androidのタッチ操作の振動も有効にしてください。</string>
     <string name="language_summary">システム設定はAndroidの言語に従います。英語・日本語・チェコ語を選ぶと音OFFだけに適用されます。</string>
     <string name="language_system">システム設定</string>
     <string name="language_english">英語</string>

@@ -28,7 +28,7 @@ class TapFeedback(private val context: Context) {
         } ?: return
         if (!vibrator.hasVibrator()) return
 
-        val effect = VibrationEffect.createPredefined(VibrationEffect.EFFECT_TICK)
+        val effect = VibrationEffect.createWaveform(longArrayOf(0, 90, 80, 150), -1)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             vibrator.vibrate(
                 effect,

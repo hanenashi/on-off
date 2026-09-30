@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">音OFF</string>
+    <string name="home_shortcut_section">Zástupce na ploše</string>
+    <string name="home_shortcut_summary">Přidejte zástupce, jehož obrázek odpovídá režimu zvuku. Nahraďte jím původní ikonu na ploše. Běžná ikona aplikace se nemění a dál přepíná režimy; dlouhým stiskem otevřete Nastavení.</string>
+    <string name="add_home_shortcut">Přidat zástupce na plochu</string>
+    <string name="confirm_home_shortcut">Potvrďte přidání zástupce v launcheru.</string>
+    <string name="shortcut_not_supported">Váš launcher zde nepodporuje přidání zástupce. Běžná ikona aplikace dál přepíná režimy.</string>
+    <string name="cycle_shortcut_long">Přepnout režim zvuku</string>
     <string name="explanation">Klepnutím na ikonu 音OFF přepnete režim zvuku. Nastavení otevřete dlouhým stiskem ikony.</string>
     <string name="open_dnd_access">Otevřít přístup k režimu Nerušit</string>
     <string name="access_granted">Přístup k režimu Nerušit je povolen.</string>
@@ -11,7 +17,7 @@
     <string name="language_section">Jazyk</string>
     <string name="feedback_section">Odezva klepnutí</string>
     <string name="tap_vibration">Vibrovat při klepnutí na ikonu</string>
-    <string name="tap_vibration_summary">Krátká vibrace potvrdí klepnutí na ikonu před změnou režimu a aktualizací ikony. Vibrace při dotyku musí být povolené i v Androidu.</string>
+    <string name="tap_vibration_summary">Dvě zavibrování potvrdí klepnutí na ikonu před změnou režimu a aktualizací ikony. Vibrace při dotyku musí být povolené i v Androidu.</string>
     <string name="language_summary">Volba podle systému sleduje jazyk Androidu. Angličtina, japonština nebo čeština přepíše jazyk pouze pro 音OFF.</string>
     <string name="language_system">Podle systému</string>
     <string name="language_english">Angličtina</string>
