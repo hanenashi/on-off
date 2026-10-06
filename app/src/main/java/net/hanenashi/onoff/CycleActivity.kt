@@ -27,8 +27,10 @@ class CycleActivity : Activity() {
 
         TapFeedback(this).vibrate()
         val result = SoundCycleController(this).cycle("launcher")
-        LauncherShortcutController(this).updateForCurrentMode(result.after)
         window.decorView.postDelayed({
+            // Let onResume return before publishing so Android can observe our
+            // foreground state. Read again in case the sound transition settled late.
+            LauncherShortcutController(this).updateForCurrentMode(SoundCycleController(this).snapshot())
             ModeToast.show(this, result)
             finishCycleActivity()
         }, TOAST_DELAY_MS)

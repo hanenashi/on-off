@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">音OFF</string>
+    <string name="icon_update_accepted">アイコン更新：Androidが受け付けました</string>
+    <string name="icon_update_limited">アイコン更新：Androidが制限しました。設定を開き直してください</string>
+    <string name="icon_update_not_pinned">アイコン更新：ホーム画面のショートカットが見つかりません</string>
+    <string name="icon_update_unknown">アイコン更新：未確認</string>
     <string name="home_shortcut_section">ホーム画面のショートカット</string>
     <string name="home_shortcut_summary">サウンドモードに合わせて画像が変わるショートカットを追加し、ホーム画面の古いアイコンと置き換えてください。通常のアプリアイコンの画像は変わりませんが、タップでモードを切り替え、長押しで設定を開けます。</string>
     <string name="add_home_shortcut">ホーム画面に追加</string>

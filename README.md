@@ -73,6 +73,8 @@ app/src/main/java/net/hanenashi/onoff/LauncherShortcutController.kt
 
 `CycleActivity` is a tiny transparent foreground activity used for the launcher action. `MainActivity` is the settings screen. `SoundCycleController` owns the DND/ringer-mode transition logic. `LauncherShortcutController` updates the pinned `cycle` shortcut without changing its identity or disabling launcher components.
 
+The `1.0.2-rc1` test build publishes the same shortcut as dynamic and uses packaged adaptive icon resources to address a reported Pixel Launcher refresh freeze. Settings shows Android's icon-update acceptance status. Emulator testing passes, but the affected physical phone still needs to confirm the workaround.
+
 `LauncherSound` is the permanent app-drawer entry. Legacy `LauncherVibrate` and `LauncherDnd` aliases remain enabled but have no launcher intent filters, allowing cached old explicit intents to work without creating extra app-drawer icons. `AppUpdateReceiver` and the activity entry paths reset old persisted disabled-component overrides during migration. Do not restore mode-dependent alias toggling: Microsoft Launcher can retain the disabled target and show “App isn’t installed” during refresh.
 
 The Android package is `net.hanenashi.onoff`.

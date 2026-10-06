@@ -323,6 +323,8 @@ class MainActivity : Activity() {
             if (pinShortcutButton.isEnabled) R.string.home_shortcut_summary else R.string.shortcut_not_supported,
         )
         stateView.text = buildString {
+            append(shortcuts.updateStatus())
+            append('\n')
             append(getString(R.string.mode_label))
             append(": ")
             append(getString(snapshot.modeLabelRes()))

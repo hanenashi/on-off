@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">音OFF</string>
+    <string name="icon_update_accepted">Icon update: accepted by Android</string>
+    <string name="icon_update_limited">Icon update: limited by Android; reopen Settings and try again</string>
+    <string name="icon_update_not_pinned">Icon update: no pinned shortcut found</string>
+    <string name="icon_update_unknown">Icon update: not checked yet</string>
     <string name="explanation">Tap the 音OFF icon to cycle sound modes. Long-press the icon for Settings.</string>
     <string name="home_shortcut_section">Home-screen shortcut</string>
     <string name="home_shortcut_summary">Add a shortcut whose picture follows the sound mode. Replace your old home-screen icon with it. The regular app icon stays fixed and still cycles modes; long-press it for Settings.</string>

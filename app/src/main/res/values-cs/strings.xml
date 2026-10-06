@@ -1,5 +1,9 @@
 <resources>
     <string name="app_name">音OFF</string>
+    <string name="icon_update_accepted">Aktualizace ikony: Android ji přijal</string>
+    <string name="icon_update_limited">Aktualizace ikony: Android ji omezil; znovu otevřete Nastavení</string>
+    <string name="icon_update_not_pinned">Aktualizace ikony: zástupce na ploše nenalezen</string>
+    <string name="icon_update_unknown">Aktualizace ikony: zatím neověřeno</string>
     <string name="home_shortcut_section">Zástupce na ploše</string>
     <string name="home_shortcut_summary">Přidejte zástupce, jehož obrázek odpovídá režimu zvuku. Nahraďte jím původní ikonu na ploše. Běžná ikona aplikace se nemění a dál přepíná režimy; dlouhým stiskem otevřete Nastavení.</string>
     <string name="add_home_shortcut">Přidat zástupce na plochu</string>

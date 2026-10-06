@@ -1,5 +1,14 @@
 # 音OFF handoff
 
+## October 6 shortcut refresh test build
+
+- `1.0.2-rc1`, version code 3, is a candidate workaround for a Pixel Launcher report: a freshly pinned icon changes once to Vibrate and then stops updating while cycling continues.
+- Same pinned ID (`cycle`) and permanent launch target. Updates now publish that ID with `addDynamicShortcuts`, so existing pinned copies also become dynamic. Icons reference the packaged adaptive mipmap resources instead of replacing bitmap files.
+- Launcher updates run after the cycling activity returns from `onResume`, in the existing delayed toast callback, with a fresh sound snapshot.
+- Settings → Current state reports whether Android accepted the latest icon update, rate-limited it, or found no pinned shortcut. Acceptance does not prove the launcher displayed it.
+- Validation: build/lint pass; Android 15 Pixel Launcher emulator preserved the pinned shortcut through an in-place upgrade and visually changed its icon through four successive transitions. Shortcut service showed `DynPinIc-r`, the correct mode resource, and no bitmap file. The previous build also worked in this emulator; the reported Android 17 device-specific freeze was not reproduced, so this is a prerelease, not a confirmed fix.
+
+
 ## October 2026 launcher update
 
 - The home-screen control is now a pinned shortcut (`cycle`) with a stable target, `LauncherSound`. Its artwork changes with the observed sound mode.
