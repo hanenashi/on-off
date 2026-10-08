@@ -10,8 +10,8 @@ android {
         applicationId = "net.hanenashi.onoff"
         minSdk = 29
         targetSdk = 37
-        versionCode = 4
-        versionName = "1.0.2-rc2"
+        versionCode = 5
+        versionName = "1.0.2-rc3"
     }
 
     lint {
