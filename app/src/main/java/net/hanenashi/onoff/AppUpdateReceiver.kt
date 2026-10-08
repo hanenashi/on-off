@@ -8,6 +8,7 @@ class AppUpdateReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
         if (intent.action == Intent.ACTION_MY_PACKAGE_REPLACED) {
             LauncherShortcutController(context).ensureStableLauncher()
+            ModeWidgetProvider.refresh(context)
         }
     }
 }

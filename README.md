@@ -2,7 +2,7 @@
 
 **Website:** [hanenashi.github.io/on-off](https://hanenashi.github.io/on-off/)
 
-音OFF is a deliberately small Android utility for cycling the phone's real sound state from the home-screen app icon.
+音OFF is a deliberately small Android utility for cycling the phone's real sound state from a home-screen widget or app icon.
 
 Default cycle:
 
@@ -16,15 +16,16 @@ The project started as a replacement for one useful feature from the abandoned T
 
 ## Current behavior
 
-- Tapping the 音OFF launcher icon cycles immediately and exits.
+- Tapping the 音OFF widget or launcher icon cycles immediately and exits.
 - Launcher taps give two vibration pulses before cycling, enabled by default and switchable in Settings under Tap feedback. Android touch-feedback settings still apply.
 - Long-pressing the launcher icon exposes a Settings shortcut.
 - Settings can include or exclude DND and Vibrate from the cycle.
 - Settings default to the Android system language and can explicitly override
   音OFF to English, Japanese, or Czech.
 - Defaults are DND excluded and Vibrate included.
-- Settings → Add home-screen shortcut creates a pinned shortcut with Sound, Vibrate, and DND artwork. Replace the old home-screen app icon with this shortcut once.
-- The pinned shortcut keeps the same ID and tap target while its image updates. A delayed image refresh cannot disable the button. The regular app-drawer icon stays fixed and still cycles modes.
+- Settings → Add mode widget requests a one-cell home-screen widget. Its black-circle Sound, Vibrate, and DND images update directly, avoiding Pixel Launcher's pinned-shortcut image cache. Remove the old home-screen shortcut after placing the widget.
+- Existing pinned shortcuts remain supported as a legacy option. Their tap target stays fixed and cycles even if Pixel Launcher freezes the displayed shortcut image after a language change.
+- The regular app-drawer icon stays fixed and still cycles modes; long-press it for Settings.
 - Each successful tap shows a short Toast naming the resulting mode.
 
 ## Primary target
@@ -69,11 +70,12 @@ app/src/main/java/net/hanenashi/onoff/CycleActivity.kt
 app/src/main/java/net/hanenashi/onoff/MainActivity.kt
 app/src/main/java/net/hanenashi/onoff/SoundCycleController.kt
 app/src/main/java/net/hanenashi/onoff/LauncherShortcutController.kt
+app/src/main/java/net/hanenashi/onoff/ModeWidgetProvider.kt
 ```
 
-`CycleActivity` is a tiny transparent foreground activity used for the launcher action. `MainActivity` is the settings screen. `SoundCycleController` owns the DND/ringer-mode transition logic. `LauncherShortcutController` updates the pinned `cycle` shortcut without changing its identity or disabling launcher components.
+`CycleActivity` is a tiny transparent foreground activity used for launcher and widget taps. `MainActivity` is the settings screen. `SoundCycleController` owns the DND/ringer-mode transition logic. `ModeWidgetProvider` pushes `RemoteViews` updates directly to placed widgets after each cycle and when Settings opens. `LauncherShortcutController` still updates the legacy pinned `cycle` shortcut without changing its identity or disabling launcher components.
 
-The `1.0.2-rc1` test build publishes the same shortcut as dynamic and uses packaged adaptive icon resources to address a reported Pixel Launcher refresh freeze. Settings shows Android's icon-update acceptance status. Emulator testing passes, but the affected physical phone still needs to confirm the workaround.
+The `1.0.2-rc2` test build adds the widget after the shortcut image froze again on a Pixel 10a following an app-language change. Its symbols are native vector drawables on black circles; the old phone-frame artwork remains in `assets/` as source history. Settings still shows Android's shortcut-update acceptance status for diagnostics. The widget passed Android 15 Pixel Launcher emulator tests through repeated mode taps and app-language changes; the affected physical phone still needs to confirm it.
 
 `LauncherSound` is the permanent app-drawer entry. Legacy `LauncherVibrate` and `LauncherDnd` aliases remain enabled but have no launcher intent filters, allowing cached old explicit intents to work without creating extra app-drawer icons. `AppUpdateReceiver` and the activity entry paths reset old persisted disabled-component overrides during migration. Do not restore mode-dependent alias toggling: Microsoft Launcher can retain the disabled target and show “App isn’t installed” during refresh.
 

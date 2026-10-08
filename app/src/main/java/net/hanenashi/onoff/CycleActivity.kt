@@ -31,6 +31,7 @@ class CycleActivity : Activity() {
             // Let onResume return before publishing so Android can observe our
             // foreground state. Read again in case the sound transition settled late.
             LauncherShortcutController(this).updateForCurrentMode(SoundCycleController(this).snapshot())
+            ModeWidgetProvider.refresh(this)
             ModeToast.show(this, result)
             finishCycleActivity()
         }, TOAST_DELAY_MS)

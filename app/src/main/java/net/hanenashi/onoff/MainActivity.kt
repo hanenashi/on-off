@@ -26,6 +26,7 @@ class MainActivity : Activity() {
     private lateinit var includeDndSwitch: Switch
     private lateinit var includeVibrateSwitch: Switch
     private lateinit var languageGroup: RadioGroup
+    private lateinit var pinWidgetButton: Button
     private lateinit var pinShortcutButton: Button
     private lateinit var shortcutSummary: TextView
 
@@ -38,6 +39,20 @@ class MainActivity : Activity() {
 
         val controller = SoundCycleController(this)
         val settings = controller.settings()
+
+        pinWidgetButton = Button(this).apply {
+            text = getString(R.string.add_home_widget)
+            background = rounded(COLOR_ACCENT, dp(16))
+            setTextColor(Color.rgb(10, 13, 24))
+            setOnClickListener {
+                val requested = ModeWidgetProvider.requestPin(this@MainActivity)
+                Toast.makeText(
+                    this@MainActivity,
+                    if (requested) R.string.confirm_home_widget else R.string.widget_not_supported,
+                    Toast.LENGTH_LONG,
+                ).show()
+            }
+        }
 
         shortcutSummary = TextView(this).apply {
             textSize = 14f
@@ -123,6 +138,7 @@ class MainActivity : Activity() {
             setOnClickListener {
                 val result = SoundCycleController(this@MainActivity).cycle("activity")
                 LauncherShortcutController(this@MainActivity).updateForCurrentMode(result.after)
+                ModeWidgetProvider.refresh(this@MainActivity)
                 ModeToast.show(this@MainActivity, result)
                 resultView.text = getString(R.string.last_result, getString(result.toastMessageRes()))
                 refreshState()
@@ -157,6 +173,16 @@ class MainActivity : Activity() {
                     setPadding(0, dp(8), 0, dp(20))
                 })
 
+                addView(sectionTitle(getString(R.string.home_widget_section)))
+                addView(card().apply {
+                    orientation = LinearLayout.VERTICAL
+                    addView(TextView(context).apply {
+                        text = getString(R.string.home_widget_summary)
+                        textSize = 14f
+                        setTextColor(COLOR_MUTED)
+                    })
+                    addView(pinWidgetButton, buttonParams())
+                })
                 addView(sectionTitle(getString(R.string.home_shortcut_section)))
                 addView(card().apply {
                     orientation = LinearLayout.VERTICAL
@@ -318,6 +344,8 @@ class MainActivity : Activity() {
         val settings = controller.settings()
         val shortcuts = LauncherShortcutController(this)
         shortcuts.updateForCurrentMode(snapshot)
+        ModeWidgetProvider.refresh(this)
+        pinWidgetButton.isEnabled = ModeWidgetProvider.isPinningSupported(this)
         pinShortcutButton.isEnabled = shortcuts.isPinningSupported()
         shortcutSummary.text = getString(
             if (pinShortcutButton.isEnabled) R.string.home_shortcut_summary else R.string.shortcut_not_supported,
