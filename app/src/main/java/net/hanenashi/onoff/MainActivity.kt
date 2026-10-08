@@ -15,9 +15,11 @@ import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.ScrollView
+import android.widget.SeekBar
 import android.widget.Switch
 import android.widget.TextView
 import android.widget.Toast
+import kotlin.math.abs
 
 class MainActivity : Activity() {
     private lateinit var statusView: TextView
@@ -39,6 +41,7 @@ class MainActivity : Activity() {
 
         val controller = SoundCycleController(this)
         val settings = controller.settings()
+        val widgetAlignment = WidgetAlignment(this)
 
         pinWidgetButton = Button(this).apply {
             text = getString(R.string.add_home_widget)
@@ -51,6 +54,32 @@ class MainActivity : Activity() {
                     if (requested) R.string.confirm_home_widget else R.string.widget_not_supported,
                     Toast.LENGTH_LONG,
                 ).show()
+            }
+        }
+
+        val horizontalValue = alignmentValue(true, widgetAlignment.horizontalDp)
+        val verticalValue = alignmentValue(false, widgetAlignment.verticalDp)
+        val horizontalSeek = alignmentSeek(widgetAlignment.horizontalDp, WidgetAlignment.HORIZONTAL_LIMIT_DP) { value ->
+            widgetAlignment.setHorizontalDp(value)
+            horizontalValue.text = alignmentText(true, value)
+            ModeWidgetProvider.refresh(this)
+        }
+        val verticalSeek = alignmentSeek(widgetAlignment.verticalDp, WidgetAlignment.VERTICAL_LIMIT_DP) { value ->
+            widgetAlignment.setVerticalDp(value)
+            verticalValue.text = alignmentText(false, value)
+            ModeWidgetProvider.refresh(this)
+        }
+        val resetAlignmentButton = Button(this).apply {
+            text = getString(R.string.widget_alignment_reset)
+            background = rounded(COLOR_CARD_ALT, dp(16), COLOR_STROKE)
+            setTextColor(Color.WHITE)
+            setOnClickListener {
+                widgetAlignment.reset()
+                horizontalSeek.progress = WidgetAlignment.DEFAULT_HORIZONTAL_DP + WidgetAlignment.HORIZONTAL_LIMIT_DP
+                verticalSeek.progress = WidgetAlignment.DEFAULT_VERTICAL_DP + WidgetAlignment.VERTICAL_LIMIT_DP
+                horizontalValue.text = alignmentText(true, WidgetAlignment.DEFAULT_HORIZONTAL_DP)
+                verticalValue.text = alignmentText(false, WidgetAlignment.DEFAULT_VERTICAL_DP)
+                ModeWidgetProvider.refresh(this@MainActivity)
             }
         }
 
@@ -183,6 +212,21 @@ class MainActivity : Activity() {
                     })
                     addView(pinWidgetButton, buttonParams())
                 })
+                addView(sectionTitle(getString(R.string.widget_alignment_section)))
+                addView(card().apply {
+                    orientation = LinearLayout.VERTICAL
+                    addView(TextView(context).apply {
+                        text = getString(R.string.widget_alignment_summary)
+                        textSize = 14f
+                        setTextColor(COLOR_MUTED)
+                        setPadding(0, 0, 0, dp(12))
+                    })
+                    addView(horizontalValue)
+                    addView(horizontalSeek)
+                    addView(verticalValue)
+                    addView(verticalSeek)
+                    addView(resetAlignmentButton, buttonParams())
+                })
                 addView(sectionTitle(getString(R.string.home_shortcut_section)))
                 addView(card().apply {
                     orientation = LinearLayout.VERTICAL
@@ -244,6 +288,39 @@ class MainActivity : Activity() {
         this.text = text
         textSize = 16f
         setTextColor(Color.WHITE)
+    }
+
+    private fun alignmentValue(horizontal: Boolean, offset: Int): TextView = TextView(this).apply {
+        text = alignmentText(horizontal, offset)
+        textSize = 16f
+        setTextColor(Color.WHITE)
+    }
+
+    private fun alignmentText(horizontal: Boolean, offset: Int): String {
+        val position = when {
+            offset == 0 -> getString(R.string.widget_alignment_center)
+            horizontal && offset < 0 -> getString(R.string.widget_alignment_left, abs(offset))
+            horizontal -> getString(R.string.widget_alignment_right, offset)
+            offset < 0 -> getString(R.string.widget_alignment_up, abs(offset))
+            else -> getString(R.string.widget_alignment_down, offset)
+        }
+        return getString(
+            if (horizontal) R.string.widget_alignment_horizontal else R.string.widget_alignment_vertical,
+            position,
+        )
+    }
+
+    private fun alignmentSeek(initial: Int, limit: Int, onChanged: (Int) -> Unit): SeekBar = SeekBar(this).apply {
+        max = limit * 2
+        progress = initial + limit
+        setOnSeekBarChangeListener(object : SeekBar.OnSeekBarChangeListener {
+            override fun onProgressChanged(seekBar: SeekBar, progress: Int, fromUser: Boolean) {
+                if (fromUser) onChanged(progress - limit)
+            }
+
+            override fun onStartTrackingTouch(seekBar: SeekBar) = Unit
+            override fun onStopTrackingTouch(seekBar: SeekBar) = Unit
+        })
     }
 
     private fun restartSettings() {

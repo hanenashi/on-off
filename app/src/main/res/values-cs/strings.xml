@@ -10,6 +10,16 @@
     <string name="confirm_home_widget">Potvrďte přidání widgetu v launcheru.</string>
     <string name="widget_not_supported">Otevřete výběr widgetů v launcheru a přidejte widget 音OFF ručně.</string>
     <string name="widget_description">Klepnutím přepnete režim zvuku; ikona ukazuje aktuální režim.</string>
+    <string name="widget_alignment_section">Zarovnání widgetu</string>
+    <string name="widget_alignment_summary">Posuňte symbol v buňce plochy. Změny se projeví ihned; dotyková oblast zůstane na místě.</string>
+    <string name="widget_alignment_horizontal">Vodorovně: %1$s</string>
+    <string name="widget_alignment_vertical">Svisle: %1$s</string>
+    <string name="widget_alignment_center">Na středu</string>
+    <string name="widget_alignment_left">%1$d dp doleva</string>
+    <string name="widget_alignment_right">%1$d dp doprava</string>
+    <string name="widget_alignment_up">%1$d dp nahoru</string>
+    <string name="widget_alignment_down">%1$d dp dolů</string>
+    <string name="widget_alignment_reset">Obnovit zarovnání</string>
     <string name="home_shortcut_section">Zástupce (starší způsob)</string>
     <string name="home_shortcut_summary">Dosavadní zástupci fungují dál, ale Pixel Launcher může po změně jazyka přestat obnovovat jejich obrázek. Pro spolehlivou ikonu použijte widget výše.</string>
     <string name="add_home_shortcut">Přidat zástupce na plochu</string>

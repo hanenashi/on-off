@@ -10,6 +10,16 @@
     <string name="confirm_home_widget">ランチャーでウィジェットの追加を確認してください。</string>
     <string name="widget_not_supported">ランチャーのウィジェット一覧から音OFFを手動で追加してください。</string>
     <string name="widget_description">タップでサウンドモードを切り替え、現在のモードを表示します。</string>
+    <string name="widget_alignment_section">ウィジェットの位置調整</string>
+    <string name="widget_alignment_summary">ホーム画面のマス内でマークの位置を調整します。変更はすぐに反映され、タップ範囲は変わりません。</string>
+    <string name="widget_alignment_horizontal">左右：%1$s</string>
+    <string name="widget_alignment_vertical">上下：%1$s</string>
+    <string name="widget_alignment_center">中央</string>
+    <string name="widget_alignment_left">左に%1$d dp</string>
+    <string name="widget_alignment_right">右に%1$d dp</string>
+    <string name="widget_alignment_up">上に%1$d dp</string>
+    <string name="widget_alignment_down">下に%1$d dp</string>
+    <string name="widget_alignment_reset">位置をリセット</string>
     <string name="home_shortcut_section">ショートカット（旧方式）</string>
     <string name="home_shortcut_summary">従来のショートカットも使えますが、Pixel Launcherでは言語変更後に画像が更新されなくなる場合があります。上のウィジェットをおすすめします。</string>
     <string name="add_home_shortcut">ホーム画面に追加</string>

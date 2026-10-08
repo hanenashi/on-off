@@ -11,6 +11,16 @@
     <string name="confirm_home_widget">Confirm the widget in your launcher.</string>
     <string name="widget_not_supported">Open your launcher’s widget picker and add the 音OFF widget manually.</string>
     <string name="widget_description">Tap to cycle sound mode; the icon follows the current mode.</string>
+    <string name="widget_alignment_section">Widget alignment</string>
+    <string name="widget_alignment_summary">Move the symbol within its home-screen cell. Changes appear immediately; the tap area stays put.</string>
+    <string name="widget_alignment_horizontal">Horizontal: %1$s</string>
+    <string name="widget_alignment_vertical">Vertical: %1$s</string>
+    <string name="widget_alignment_center">Centered</string>
+    <string name="widget_alignment_left">%1$d dp left</string>
+    <string name="widget_alignment_right">%1$d dp right</string>
+    <string name="widget_alignment_up">%1$d dp up</string>
+    <string name="widget_alignment_down">%1$d dp down</string>
+    <string name="widget_alignment_reset">Reset alignment</string>
     <string name="home_shortcut_section">Shortcut (legacy)</string>
     <string name="home_shortcut_summary">Existing shortcuts keep working, but Pixel Launcher can freeze their picture after a language change. Use the widget above for a reliable changing icon.</string>
     <string name="add_home_shortcut">Add home-screen shortcut</string>
